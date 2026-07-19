@@ -1507,3 +1507,71 @@ a.contact-detail-value:hover {
   border-top: 1px solid rgba(16, 24, 29, 0.16);
   margin: 36px 0;
 }
+
+/* ---------- cookie notice (info banner, no consent needed) ---------- */
+
+.cookie-notice {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 60;
+  background: var(--deep);
+  border-top: 1px solid rgba(244, 244, 241, 0.18);
+  padding: 16px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.cookie-notice p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: rgba(244, 244, 241, 0.85);
+  max-width: 720px;
+}
+
+.cookie-notice p a {
+  color: #f4f4f1;
+  border-bottom: 2px solid var(--teal);
+  padding-bottom: 1px;
+}
+
+.cookie-notice p a:hover {
+  color: var(--teal);
+}
+
+.cookie-notice-btn {
+  border: 0;
+  cursor: pointer;
+  padding: 11px 26px;
+  background: var(--red);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  transition: background 0.15s ease, color 0.15s ease;
+  flex-shrink: 0;
+}
+
+.cookie-notice-btn:hover {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.footer-legal {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-legal a {
+  color: rgba(244, 244, 241, 0.5);
+}
+
+.footer-legal a:hover {
+  color: var(--teal);
+}

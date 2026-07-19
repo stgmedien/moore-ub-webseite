@@ -45,6 +45,10 @@ export default function SiteFooter() {
         </div>
         <div className="footer-bottom">
           <span>© 2026 MOORE UB — ORG.NR. 837 007 232</span>
+          <span className="footer-legal">
+            <Link href="/personvern">{no ? "Personvern" : "Privacy"}</Link>
+            <Link href="/impressum">{no ? "Juridisk informasjon" : "Legal notice"}</Link>
+          </span>
           <span>
             {no
               ? "UNGDOMSBEDRIFT — THORA STORM VGS, TRONDHEIM"

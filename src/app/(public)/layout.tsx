@@ -1,4 +1,5 @@
 import { IBM_Plex_Mono } from "next/font/google";
+import CookieNotice from "@/components/moore/CookieNotice";
 import SiteFooter from "@/components/moore/SiteFooter";
 import SiteNav from "@/components/moore/SiteNav";
 import { LanguageProvider } from "@/lib/moore-i18n";
@@ -23,6 +24,7 @@ export default function PublicLayout({
         <div className="nav-spacer" />
         <main className="flex-1">{children}</main>
         <SiteFooter />
+        <CookieNotice />
       </LanguageProvider>
     </div>
   );
