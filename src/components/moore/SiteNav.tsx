@@ -35,7 +35,6 @@ export default function SiteNav() {
         <Link href="/" className="brand" aria-label="Moore UB">
           {/* eslint-disable-next-line @next/next/no-img-element -- small inline SVG logo */}
           <img src="/logo.svg" alt="MOORE" />
-          <span className="brand-badge">UB</span>
         </Link>
         <nav className="nav-links">
           {links}
