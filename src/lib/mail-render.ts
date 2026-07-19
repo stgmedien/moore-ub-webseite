@@ -35,7 +35,7 @@ export const GLOBAL_MAIL_VARIABLES: MailVariable[] = [
   { name: "nights", description: "Nächte", example: "3", group: "Buchung" },
   { name: "persons", description: "Personen-Anzahl", example: "12", group: "Buchung" },
   { name: "purpose", description: "Anlass", example: "Klassenfahrt", group: "Buchung" },
-  { name: "bookingUrl", description: "Link zur Buchung im Konto", example: "https://www.wiesenhütte.com/konto/buchungen/abc", group: "Buchung" },
+  { name: "bookingUrl", description: "Link zur Buchung im Konto", example: "https://www.mooreub.no/konto/buchungen/abc", group: "Buchung" },
 
   // Zahlung
   { name: "totalAmount", description: "Gesamtbetrag (formatiert)", example: "1.420,00 €", group: "Zahlung" },
@@ -46,7 +46,7 @@ export const GLOBAL_MAIL_VARIABLES: MailVariable[] = [
 
   // Sonstiges
   { name: "today", description: "Heutiges Datum", example: new Date().toLocaleDateString("de-DE"), group: "Sonstiges" },
-  { name: "baseUrl", description: "Web-Adresse", example: "https://www.wiesenhütte.com", group: "Sonstiges" },
+  { name: "baseUrl", description: "Web-Adresse", example: "https://www.mooreub.no", group: "Sonstiges" },
 ];
 
 export const SAMPLE_VARIABLE_VALUES: Record<string, string> = Object.fromEntries(
@@ -150,12 +150,12 @@ export const wrapEmailHtml = (inner: string, subject?: string): string => `<!DOC
 <body style="background:#F7F7F2;padding:32px 0;margin:0;font-family:Inter,system-ui,sans-serif;">
   <div style="max-width:600px;margin:0 auto;background:#fff;padding:32px;border-radius:20px;box-shadow:0 4px 14px rgba(17,17,17,0.05);">
     <p style="font-family:Inter,sans-serif;font-size:11px;color:#2F4A35;letter-spacing:0.16em;text-transform:uppercase;margin:0 0 12px;font-weight:600;">
-      Wiesenhütte
+      Moore UB
     </p>
     ${inner}
     <hr style="border:0;border-top:1px solid #C8CEC4;margin:28px 0 12px;"/>
     <p style="font-family:Inter,sans-serif;font-size:11px;color:#5b5b56;margin:0;">
-      Skifreunde Gütersloh e.V. · hello@wiesenhütte.com · www.wiesenhütte.com
+      Moore UB · post@mooreub.no · www.mooreub.no
     </p>
   </div>
 </body>

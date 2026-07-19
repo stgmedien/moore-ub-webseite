@@ -211,7 +211,7 @@ export function TemplateEditor({
         wrapSelection("*");
       } else if (e.key === "k") {
         e.preventDefault();
-        wrapSelection("[", "](https://www.wiesenhütte.com)");
+        wrapSelection("[", "](https://www.mooreub.no)");
       }
     };
     window.addEventListener("keydown", onKey);
