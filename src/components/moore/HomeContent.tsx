@@ -296,13 +296,16 @@ export default function HomeContent() {
           </div>
           <div className="partners-grid">
             <div className="partner">
-              <span>BOA</span>
+              {/* eslint-disable-next-line @next/next/no-img-element -- small inline SVG logo */}
+              <img src="/partners/boa.svg" alt="BOA" />
             </div>
             <div className="partner">
-              <span>WILHELMSEN</span>
+              {/* eslint-disable-next-line @next/next/no-img-element -- small inline SVG logo */}
+              <img src="/partners/wilhelmsen.svg" alt="Wilhelmsen" />
             </div>
             <div className="partner">
-              <span>RAN</span>
+              {/* eslint-disable-next-line @next/next/no-img-element -- small inline SVG logo */}
+              <img src="/partners/ran.svg" alt="RAN" />
             </div>
           </div>
         </div>
