@@ -17,10 +17,16 @@ const upsertSchema = z.object({
   excerpt: z.string().max(500).optional().nullable(),
   contentHtml: z.string().default(""),
   contentJson: z.unknown().optional(),
+  titleEn: z.string().max(255).optional().nullable(),
+  excerptEn: z.string().max(500).optional().nullable(),
+  contentHtmlEn: z.string().optional().nullable(),
+  contentJsonEn: z.unknown().optional(),
   coverImageUrl: z.string().url().optional().nullable(),
   coverImageAlt: z.string().max(500).optional().nullable(),
   metaTitle: z.string().max(255).optional().nullable(),
   metaDescription: z.string().max(500).optional().nullable(),
+  metaTitleEn: z.string().max(255).optional().nullable(),
+  metaDescriptionEn: z.string().max(500).optional().nullable(),
   status: z.enum(["draft", "published", "archived"]).default("draft"),
 });
 
@@ -65,6 +71,9 @@ export async function saveBlogPost(raw: z.infer<typeof upsertSchema>): Promise<S
   if (!data.id) return { ok: false, error: "Post-ID fehlt." };
 
   const cleanHtml = sanitizeAndRestrict(data.contentHtml ?? "");
+  const cleanHtmlEn = data.contentHtmlEn?.trim()
+    ? sanitizeAndRestrict(data.contentHtmlEn)
+    : null;
   const desiredSlug = data.slug?.trim() ? toSlug(data.slug.trim()) : toSlug(data.title);
   const slug = await ensureUniqueSlug(desiredSlug, data.id);
   const reading = computeReadingMinutes(cleanHtml);
@@ -77,10 +86,16 @@ export async function saveBlogPost(raw: z.infer<typeof upsertSchema>): Promise<S
       excerpt: data.excerpt?.trim() || null,
       contentHtml: cleanHtml,
       contentJson: (data.contentJson ?? null) as never,
+      titleEn: data.titleEn?.trim() || null,
+      excerptEn: data.excerptEn?.trim() || null,
+      contentHtmlEn: cleanHtmlEn,
+      contentJsonEn: (data.contentJsonEn ?? null) as never,
       coverImageUrl: data.coverImageUrl?.trim() || null,
       coverImageAlt: data.coverImageAlt?.trim() || null,
       metaTitle: data.metaTitle?.trim() || null,
       metaDescription: data.metaDescription?.trim() || null,
+      metaTitleEn: data.metaTitleEn?.trim() || null,
+      metaDescriptionEn: data.metaDescriptionEn?.trim() || null,
       readingMinutes: reading,
       updatedAt: new Date(),
     })
