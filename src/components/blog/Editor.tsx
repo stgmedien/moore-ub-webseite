@@ -29,6 +29,7 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
   const [linkOpen, setLinkOpen] = useState(false);
   const [linkUrl, setLinkUrl] = useState("");
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const editor = useEditor({
@@ -68,11 +69,14 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
         event.preventDefault();
         (async () => {
           setUploading(true);
+          setUploadError(null);
           try {
             for (const file of imageFiles) {
               const url = await onUploadImage(file);
               editor?.chain().focus().setImage({ src: url, alt: file.name }).run();
             }
+          } catch (err) {
+            setUploadError(err instanceof Error ? err.message : "Upload fehlgeschlagen.");
           } finally {
             setUploading(false);
           }
@@ -87,6 +91,7 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
         event.preventDefault();
         (async () => {
           setUploading(true);
+          setUploadError(null);
           try {
             for (const it of fileItems) {
               const file = it.getAsFile();
@@ -94,6 +99,8 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
               const url = await onUploadImage(file);
               editor?.chain().focus().setImage({ src: url, alt: file.name }).run();
             }
+          } catch (err) {
+            setUploadError(err instanceof Error ? err.message : "Upload fehlgeschlagen.");
           } finally {
             setUploading(false);
           }
@@ -123,9 +130,12 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
     e.target.value = "";
     if (!file) return;
     setUploading(true);
+    setUploadError(null);
     try {
       const url = await onUploadImage(file);
       editor.chain().focus().setImage({ src: url, alt: file.name }).run();
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : "Upload fehlgeschlagen.");
     } finally {
       setUploading(false);
     }
@@ -266,6 +276,19 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
       {uploading && (
         <div className="px-3 py-2 bg-[var(--color-wh-green-soft)] text-[var(--color-wh-deep-green)] text-sm font-medium">
           Bild wird hochgeladen ...
+        </div>
+      )}
+
+      {uploadError && (
+        <div className="px-3 py-2 bg-red-50 text-red-800 text-sm font-medium flex items-center justify-between gap-3">
+          <span>Bild-Upload fehlgeschlagen: {uploadError}</span>
+          <button
+            type="button"
+            onClick={() => setUploadError(null)}
+            className="shrink-0 underline cursor-pointer"
+          >
+            Schließen
+          </button>
         </div>
       )}
 

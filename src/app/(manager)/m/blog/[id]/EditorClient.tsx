@@ -13,7 +13,7 @@ import {
   unpublishBlogPost,
   deleteBlogPost,
 } from "../actions";
-import { uploadBlogImage } from "@/lib/blog/upload";
+import { upload } from "@vercel/blob/client";
 
 type Post = {
   id: string;
@@ -48,12 +48,21 @@ export default function EditorClient({ post }: { post: Post }) {
   const [error, setError] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<Date | null>(null);
 
+  // Client-Upload direkt zum Blob-Store (umgeht das 4,5-MB-Limit der
+  // Vercel-Functions); /api/blog/upload prüft Auth und stellt das Token aus.
   const uploadImage = async (file: File): Promise<string> => {
-    const fd = new FormData();
-    fd.append("file", file);
-    const res = await uploadBlogImage(fd);
-    if (!res.ok) throw new Error(res.error);
-    return res.url;
+    const MAX_BYTES = 8 * 1024 * 1024;
+    if (file.size > MAX_BYTES) {
+      throw new Error(
+        `Datei zu groß (${Math.round(file.size / 1024 / 1024)} MB). Maximal 8 MB.`
+      );
+    }
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 80);
+    const blob = await upload(`blog/${safeName}`, file, {
+      access: "public",
+      handleUploadUrl: "/api/blog/upload",
+    });
+    return blob.url;
   };
 
   const onPickCover = async (e: React.ChangeEvent<HTMLInputElement>) => {

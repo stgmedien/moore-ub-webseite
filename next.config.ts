@@ -61,7 +61,10 @@ const nextConfig: NextConfig = {
               "style-src 'self' 'unsafe-inline'",
               "img-src 'self' data: blob: https://*.blob.vercel-storage.com https://*.public.blob.vercel-storage.com",
               "font-src 'self' data:",
-              "connect-src 'self'",
+              // Client-Uploads im Blog-Editor (s. api/blog/upload): das
+              // @vercel/blob-SDK lädt über https://vercel.com/api/blob/ hoch,
+              // die Blob-Hosts decken direkte Store-Zugriffe ab.
+              "connect-src 'self' https://vercel.com/api/blob/ https://*.blob.vercel-storage.com https://*.public.blob.vercel-storage.com",
               "frame-src 'self'",
               "object-src 'none'",
               "base-uri 'self'",
