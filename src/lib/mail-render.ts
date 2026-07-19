@@ -14,39 +14,39 @@ export type MailVariable = {
   name: string;
   description: string;
   example: string;
-  group: "Kunde" | "Buchung" | "Zahlung" | "Sonstiges";
+  group: "Customer" | "Booking" | "Payment" | "Other";
 };
 
 export const GLOBAL_MAIL_VARIABLES: MailVariable[] = [
   // Kunde
-  { name: "firstName", description: "Vorname", example: "Maren", group: "Kunde" },
-  { name: "lastName", description: "Nachname", example: "Holtkamp", group: "Kunde" },
-  { name: "guestName", description: "Vor- + Nachname", example: "Maren Holtkamp", group: "Kunde" },
-  { name: "email", description: "E-Mail-Adresse", example: "maren@example.com", group: "Kunde" },
-  { name: "phone", description: "Telefon", example: "0521 12345", group: "Kunde" },
-  { name: "salutation", description: "Anrede (Hallo Vorname,)", example: "Hallo Maren,", group: "Kunde" },
+  { name: "firstName", description: "First name", example: "Maren", group: "Customer" },
+  { name: "lastName", description: "Last name", example: "Holtkamp", group: "Customer" },
+  { name: "guestName", description: "First + last name", example: "Maren Holtkamp", group: "Customer" },
+  { name: "email", description: "E-mail address", example: "maren@example.com", group: "Customer" },
+  { name: "phone", description: "Phone", example: "0521 12345", group: "Customer" },
+  { name: "salutation", description: "Salutation (Hello first name,)", example: "Hallo Maren,", group: "Customer" },
 
   // Buchung
-  { name: "bookingNumber", description: "Buchungsnummer", example: "WH-2026-1042", group: "Buchung" },
-  { name: "arrival", description: "Anreise (lang)", example: "Fr, 6. Februar 2026", group: "Buchung" },
-  { name: "departure", description: "Abreise (lang)", example: "Mo, 9. Februar 2026", group: "Buchung" },
-  { name: "arrivalShort", description: "Anreise (kurz)", example: "06.02.2026", group: "Buchung" },
-  { name: "departureShort", description: "Abreise (kurz)", example: "09.02.2026", group: "Buchung" },
-  { name: "nights", description: "Nächte", example: "3", group: "Buchung" },
-  { name: "persons", description: "Personen-Anzahl", example: "12", group: "Buchung" },
-  { name: "purpose", description: "Anlass", example: "Klassenfahrt", group: "Buchung" },
-  { name: "bookingUrl", description: "Link zur Buchung im Konto", example: "https://www.wiesenhütte.com/konto/buchungen/abc", group: "Buchung" },
+  { name: "bookingNumber", description: "Booking number", example: "WH-2026-1042", group: "Booking" },
+  { name: "arrival", description: "Arrival (long)", example: "Fr, 6. Februar 2026", group: "Booking" },
+  { name: "departure", description: "Departure (long)", example: "Mo, 9. Februar 2026", group: "Booking" },
+  { name: "arrivalShort", description: "Arrival (short)", example: "06.02.2026", group: "Booking" },
+  { name: "departureShort", description: "Departure (short)", example: "09.02.2026", group: "Booking" },
+  { name: "nights", description: "Nights", example: "3", group: "Booking" },
+  { name: "persons", description: "Number of persons", example: "12", group: "Booking" },
+  { name: "purpose", description: "Occasion", example: "Klassenfahrt", group: "Booking" },
+  { name: "bookingUrl", description: "Link to the booking in the account", example: "https://www.wiesenhütte.com/konto/buchungen/abc", group: "Booking" },
 
   // Zahlung
-  { name: "totalAmount", description: "Gesamtbetrag (formatiert)", example: "1.420,00 €", group: "Zahlung" },
-  { name: "paidAmount", description: "Bereits bezahlt", example: "710,00 €", group: "Zahlung" },
-  { name: "remainderAmount", description: "Restbetrag", example: "710,00 €", group: "Zahlung" },
-  { name: "depositAmount", description: "Kaution", example: "300,00 €", group: "Zahlung" },
-  { name: "invoiceNumber", description: "Rechnungs-Nr (falls vorhanden)", example: "WH-2026-00042", group: "Zahlung" },
+  { name: "totalAmount", description: "Total amount (formatted)", example: "1.420,00 €", group: "Payment" },
+  { name: "paidAmount", description: "Already paid", example: "710,00 €", group: "Payment" },
+  { name: "remainderAmount", description: "Remaining amount", example: "710,00 €", group: "Payment" },
+  { name: "depositAmount", description: "Deposit", example: "300,00 €", group: "Payment" },
+  { name: "invoiceNumber", description: "Invoice no. (if present)", example: "WH-2026-00042", group: "Payment" },
 
   // Sonstiges
-  { name: "today", description: "Heutiges Datum", example: new Date().toLocaleDateString("de-DE"), group: "Sonstiges" },
-  { name: "baseUrl", description: "Web-Adresse", example: "https://www.wiesenhütte.com", group: "Sonstiges" },
+  { name: "today", description: "Today's date", example: new Date().toLocaleDateString("en-GB"), group: "Other" },
+  { name: "baseUrl", description: "Web address", example: "https://www.wiesenhütte.com", group: "Other" },
 ];
 
 export const SAMPLE_VARIABLE_VALUES: Record<string, string> = Object.fromEntries(

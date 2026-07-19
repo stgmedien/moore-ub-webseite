@@ -34,19 +34,19 @@ const NAV_GROUPS: NavGroup[] = [
     items: [{ href: "/m/dashboard", label: "Dashboard", Icon: LayoutDashboard }],
   },
   {
-    label: "Inhalte",
+    label: "Content",
     items: [
       { href: "/m/blog", label: "Blog", Icon: FileText },
-      { href: "/m/anfragen", label: "Anfragen", Icon: Inbox },
+      { href: "/m/anfragen", label: "Inquiries", Icon: Inbox },
     ],
   },
   {
     label: "System",
     items: [
-      { href: "/m/benutzer", label: "Benutzer", Icon: Users2 },
-      { href: "/m/mail-templates", label: "Mail-Templates", Icon: MailIcon },
-      { href: "/m/einstellungen", label: "Einstellungen", Icon: Settings },
-      { href: "/m/audit", label: "Audit-Log", Icon: ScrollText, adminOnly: true },
+      { href: "/m/benutzer", label: "Users", Icon: Users2 },
+      { href: "/m/mail-templates", label: "Mail templates", Icon: MailIcon },
+      { href: "/m/einstellungen", label: "Settings", Icon: Settings },
+      { href: "/m/audit", label: "Audit log", Icon: ScrollText, adminOnly: true },
     ],
   },
 ];
@@ -134,7 +134,7 @@ export const Sidebar = ({
           <div className="flex-1 min-w-0">
             <div className="text-sm font-semibold truncate">{user.name}</div>
             <div className="text-xs opacity-70 truncate flex items-center gap-1">
-              <UserCircle size={11} /> Mein Profil
+              <UserCircle size={11} /> My profile
             </div>
           </div>
         </Link>
@@ -142,7 +142,7 @@ export const Sidebar = ({
           onClick={() => signOut({ callbackUrl: "/m/login" })}
           className="mt-3 w-full flex items-center justify-center gap-2 text-xs font-semibold uppercase tracking-wider opacity-80 hover:opacity-100 cursor-pointer py-2 rounded-md border border-[var(--color-wh-snow)]/20 hover:bg-[var(--color-wh-snow)]/10 transition-colors"
         >
-          <LogOut size={14} /> Abmelden
+          <LogOut size={14} /> Sign out
         </button>
       </div>
     </aside>

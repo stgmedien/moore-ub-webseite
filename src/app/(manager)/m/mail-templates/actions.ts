@@ -17,7 +17,7 @@ const createSchema = z.object({
     .string()
     .min(2)
     .max(80)
-    .regex(/^[a-z0-9_-]+$/i, "Nur a–z, 0–9, _, -"),
+    .regex(/^[a-z0-9_-]+$/i, "Only a–z, 0–9, _, -"),
   name: z.string().min(2).max(200),
   description: z.string().max(2000).optional().nullable(),
   variables: z.string().max(2000).optional().nullable(),
@@ -47,7 +47,7 @@ export async function createTemplate(formData: FormData) {
   });
   await db.insert(activityLog).values({
     who: me,
-    what: `Mail-Template angelegt: ${parsed.data.key}`,
+    what: `Mail template created: ${parsed.data.key}`,
   });
   revalidatePath("/m/mail-templates");
   return { ok: true as const };
@@ -100,8 +100,8 @@ export async function saveTemplateVersion(formData: FormData) {
 
   await db.insert(activityLog).values({
     who: me,
-    what: `Mail-Template Version ${nextVersion} gespeichert${
-      parsed.data.setActive ? " + aktiviert" : ""
+    what: `Mail template version ${nextVersion} saved${
+      parsed.data.setActive ? " + activated" : ""
     } (template ${parsed.data.templateId})`,
   });
   revalidatePath(`/m/mail-templates/${parsed.data.templateId}`);
@@ -119,7 +119,7 @@ export async function activateVersion(formData: FormData) {
     .where(eq(mailTemplates.id, templateId));
   await db.insert(activityLog).values({
     who: me,
-    what: `Mail-Template aktive Version geaendert (template ${templateId} -> version ${versionId})`,
+    what: `Mail template active version changed (template ${templateId} -> version ${versionId})`,
   });
   revalidatePath(`/m/mail-templates/${templateId}`);
   return { ok: true as const };
@@ -140,7 +140,7 @@ export async function deleteTemplate(formData: FormData) {
   await db.delete(mailTemplates).where(eq(mailTemplates.id, id));
   await db.insert(activityLog).values({
     who: me,
-    what: `Mail-Template gelöscht (${id})`,
+    what: `Mail template deleted (${id})`,
   });
   revalidatePath("/m/mail-templates");
   return { ok: true as const };

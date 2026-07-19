@@ -27,7 +27,7 @@ export default function SettingsForm({ initial, updatedAt, updatedBy }: Props) {
     start(async () => {
       const res = await saveSiteSettings({ cleaningDaysAfterDeparture: cleaningDays });
       if (!res.ok) {
-        setError(res.error ?? "Speichern fehlgeschlagen.");
+        setError(res.error ?? "Saving failed.");
         return;
       }
       setSavedAt(new Date());
@@ -43,8 +43,8 @@ export default function SettingsForm({ initial, updatedAt, updatedBy }: Props) {
       <div className="p-6 sm:p-8 space-y-6">
         <SettingRow
           icon={<BrushCleaning size={22} className="text-[var(--color-wh-deep-green)]" />}
-          title="Reinigungspuffer nach Abreise"
-          description="Anzahl Tage, an denen die Hütte nach einer Abreise nicht buchbar ist. 1 = nur der Abreisetag selbst (Standardfall — Reinigung am Tag der Abreise, Folgegäste können am nächsten Tag anreisen). 0 = back-to-back-Buchungen erlaubt."
+          title="Cleaning buffer after departure"
+          description="Number of days the cabin is not bookable after a departure. 1 = only the departure day itself (default — cleaning on the day of departure, the next guests can arrive the following day). 0 = back-to-back bookings allowed."
         >
           <div className="flex items-center gap-2 flex-wrap">
             {[0, 1, 2, 3].map((n) => (
@@ -58,7 +58,7 @@ export default function SettingsForm({ initial, updatedAt, updatedBy }: Props) {
                     : "bg-white text-[var(--color-wh-deep-green)] border-[var(--color-wh-winter-grey)] hover:bg-[var(--color-wh-green-soft)]"
                 }`}
               >
-                {n} {n === 1 ? "Tag" : "Tage"}
+                {n} {n === 1 ? "day" : "days"}
               </button>
             ))}
             <input
@@ -68,20 +68,20 @@ export default function SettingsForm({ initial, updatedAt, updatedBy }: Props) {
               value={cleaningDays}
               onChange={(e) => setCleaningDays(Math.max(0, Math.min(7, Number(e.target.value) || 0)))}
               className="ml-2 w-20 h-12 px-3 rounded-[var(--radius-md)] border border-[var(--color-wh-winter-grey)] bg-white text-center font-semibold"
-              aria-label="Anzahl Tage manuell"
+              aria-label="Number of days (manual)"
             />
           </div>
           <div className="mt-3 text-xs text-[var(--color-wh-fg-muted)] leading-relaxed">
-            <strong>Beispiel:</strong> Bei {cleaningDays} {cleaningDays === 1 ? "Tag" : "Tagen"}{" "}
-            Reinigungspuffer und Abreise am 16.05. (= letzter Buchungstag, Gäste reisen an dem
-            Tag ab; gereinigt wird danach) ist die nächste Anreise frühestens am{" "}
+            <strong>Example:</strong> With {cleaningDays} {cleaningDays === 1 ? "day" : "days"}{" "}
+            of cleaning buffer and departure on 16 May (= last booked day, guests leave that
+            day; cleaning happens afterwards) the next arrival is possible on{" "}
             <strong>
-              {new Date(2026, 4, 16 + cleaningDays + 1).toLocaleDateString("de-DE", {
+              {new Date(2026, 4, 16 + cleaningDays + 1).toLocaleDateString("en-GB", {
                 day: "numeric",
                 month: "long",
               })}
             </strong>{" "}
-            möglich.
+            at the earliest.
           </div>
         </SettingRow>
       </div>
@@ -90,19 +90,19 @@ export default function SettingsForm({ initial, updatedAt, updatedBy }: Props) {
         <div className="text-xs text-[var(--color-wh-fg-muted)]">
           {savedAt ? (
             <span className="text-[var(--color-wh-deep-green)] font-semibold inline-flex items-center gap-1.5">
-              <Check size={14} /> Gespeichert {savedAt.toLocaleTimeString("de-DE")}
+              <Check size={14} /> Saved {savedAt.toLocaleTimeString("en-GB")}
             </span>
           ) : updatedAt ? (
             <>
-              Letzte Änderung:{" "}
-              {new Date(updatedAt).toLocaleString("de-DE", {
+              Last change:{" "}
+              {new Date(updatedAt).toLocaleString("en-GB", {
                 dateStyle: "medium",
                 timeStyle: "short",
               })}
               {updatedBy ? ` · ${updatedBy}` : ""}
             </>
           ) : (
-            <>Standard-Einstellungen</>
+            <>Default settings</>
           )}
         </div>
         <div className="flex gap-2">
@@ -112,12 +112,12 @@ export default function SettingsForm({ initial, updatedAt, updatedBy }: Props) {
               variant="secondary"
               onClick={() => setCleaningDays(initial.cleaningDaysAfterDeparture)}
             >
-              Zurücksetzen
+              Reset
             </Button>
           )}
           <Button type="submit" disabled={!dirty || pending}>
             {pending ? <Loader2 size={16} className="animate-spin" /> : null}
-            {pending ? " Speichere ..." : "Speichern"}
+            {pending ? " Saving..." : "Save"}
           </Button>
         </div>
       </div>

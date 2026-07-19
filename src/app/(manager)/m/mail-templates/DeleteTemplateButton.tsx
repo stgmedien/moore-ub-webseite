@@ -11,7 +11,7 @@ export function DeleteTemplateButton({ id, name }: { id: string; name: string })
       action={(fd) => {
         if (
           !confirm(
-            `Template "${name}" endgültig löschen?\n\nAlle Versionen werden gelöscht. Versendete Mails bleiben im Email-Log erhalten.`
+            `Permanently delete template "${name}"?\n\nAll versions will be deleted. Sent mails remain in the e-mail log.`
           )
         ) {
           return;
@@ -26,9 +26,9 @@ export function DeleteTemplateButton({ id, name }: { id: string; name: string })
         type="submit"
         disabled={pending}
         className="text-xs text-red-700 hover:text-red-900 disabled:opacity-50"
-        title="Template löschen"
+        title="Delete template"
       >
-        {pending ? "…" : "Löschen"}
+        {pending ? "…" : "Delete"}
       </button>
     </form>
   );

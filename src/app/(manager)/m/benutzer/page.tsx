@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import UsersTable from "./UsersTable";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Benutzer · Moore UB Manager" };
+export const metadata = { title: "Users · Moore UB Manager" };
 
 export default async function UsersPage() {
   const session = await auth();
@@ -30,12 +30,12 @@ export default async function UsersPage() {
     <div className="px-4 sm:px-8 py-8 sm:py-10 max-w-[1200px]">
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
         <div>
-          <div className="eyebrow">Benutzer</div>
-          <h1 className="text-[40px] mt-2 mb-0">Zugänge & Rollen</h1>
+          <div className="eyebrow">Users</div>
+          <h1 className="text-[40px] mt-2 mb-0">Accounts & roles</h1>
           <p className="text-[var(--color-wh-fg-muted)] m-0 mt-2 max-w-2xl">
             {isAdmin
-              ? "Du bist Admin. Du kannst Manager und Admins anlegen, Rollen ändern, Passwörter zurücksetzen und Nutzer löschen."
-              : "Übersicht der registrierten Manager und Admins. Rollenänderungen können nur Admins durchführen."}
+              ? "You are an admin. You can create managers and admins, change roles, reset passwords and delete users."
+              : "Overview of registered managers and admins. Only admins can change roles."}
           </p>
         </div>
       </div>
