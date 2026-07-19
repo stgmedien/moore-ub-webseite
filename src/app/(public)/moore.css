@@ -1577,3 +1577,71 @@ a.contact-detail-value:hover {
 .footer-legal a:hover {
   color: var(--teal);
 }
+
+/* ---------- news ticker (latest published article, homepage) ---------- */
+
+@keyframes moore-ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.news-ticker {
+  display: block;
+  background: var(--red);
+  color: #ffffff;
+  overflow: hidden;
+  white-space: nowrap;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(16, 24, 29, 0.25);
+}
+
+.news-ticker-track {
+  display: inline-flex;
+  animation: moore-ticker 35s linear infinite;
+  will-change: transform;
+}
+
+.news-ticker:hover .news-ticker-track {
+  animation-play-state: paused;
+}
+
+.news-ticker-group {
+  display: inline-flex;
+}
+
+.news-ticker-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 14px;
+  padding-right: 56px;
+  font-family: var(--font-mono), monospace;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 1;
+  letter-spacing: 0.06em;
+}
+
+.news-ticker-label {
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  padding: 3px 6px;
+}
+
+.news-ticker-more {
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  color: #10181d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .news-ticker-track {
+    animation: none;
+  }
+}

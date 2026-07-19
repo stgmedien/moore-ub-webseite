@@ -57,12 +57,35 @@ function CrossSectionSmall() {
   );
 }
 
-export default function HomeContent() {
+export type LatestPost = { title: string; slug: string };
+
+export default function HomeContent({ latestPost = null }: { latestPost?: LatestPost | null }) {
   const { lang } = useLang();
   const no = lang === "no";
 
   return (
     <>
+      {latestPost && (
+        <Link
+          href={`/blog/${latestPost.slug}`}
+          className="news-ticker"
+          aria-label={`${no ? "Aktuelt" : "News"}: ${latestPost.title}`}
+        >
+          <span className="news-ticker-track">
+            {[0, 1].map((half) => (
+              <span key={half} className="news-ticker-group" aria-hidden={half === 1 || undefined}>
+                {Array.from({ length: 6 }).map((_, i) => (
+                  <span key={i} className="news-ticker-item">
+                    <span className="news-ticker-label">{no ? "AKTUELT" : "NEWS"}</span>
+                    {latestPost.title}
+                    <span className="news-ticker-more">{no ? "LES MER →" : "READ MORE →"}</span>
+                  </span>
+                ))}
+              </span>
+            ))}
+          </span>
+        </Link>
+      )}
       <section className="hero">
         <Image
           src="/hero-bollard.png"
