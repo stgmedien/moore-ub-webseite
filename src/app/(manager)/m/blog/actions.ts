@@ -1,0 +1,150 @@
+"use server";
+
+import { z } from "zod";
+import { eq } from "drizzle-orm";
+import { db } from "@/lib/db";
+import { blogPosts, activityLog } from "@/lib/db/schema";
+import { requireManager } from "@/lib/require-manager";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { ensureUniqueSlug, toSlug } from "@/lib/blog/slug";
+import { sanitizeAndRestrict } from "@/lib/blog/sanitize";
+
+const upsertSchema = z.object({
+  id: z.string().uuid().optional(),
+  title: z.string().min(1).max(255),
+  slug: z.string().max(255).optional(),
+  excerpt: z.string().max(500).optional().nullable(),
+  contentHtml: z.string().default(""),
+  contentJson: z.unknown().optional(),
+  coverImageUrl: z.string().url().optional().nullable(),
+  coverImageAlt: z.string().max(500).optional().nullable(),
+  metaTitle: z.string().max(255).optional().nullable(),
+  metaDescription: z.string().max(500).optional().nullable(),
+  status: z.enum(["draft", "published", "archived"]).default("draft"),
+});
+
+
+const computeReadingMinutes = (html: string): number => {
+  const text = html.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+  const words = text.split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 220));
+};
+
+export async function createBlogPost(): Promise<void> {
+  const session = await requireManager();
+  const slug = await ensureUniqueSlug(toSlug(`entwurf-${new Date().toISOString().slice(0, 10)}`));
+  const inserted = await db
+    .insert(blogPosts)
+    .values({
+      title: "Neuer Entwurf",
+      slug,
+      contentHtml: "",
+      authorId: (session.user as { id?: string } | undefined)?.id ?? null,
+      status: "draft",
+    })
+    .returning({ id: blogPosts.id });
+
+  await db.insert(activityLog).values({
+    who: session.user?.name ?? session.user?.email ?? "Manager",
+    what: `Blog-Entwurf angelegt (${slug})`,
+  });
+
+  redirect(`/m/blog/${inserted[0].id}`);
+}
+
+export type SaveResult = { ok: true; slug: string } | { ok: false; error: string };
+
+export async function saveBlogPost(raw: z.infer<typeof upsertSchema>): Promise<SaveResult> {
+  await requireManager();
+  const parsed = upsertSchema.safeParse(raw);
+  if (!parsed.success) {
+    return { ok: false, error: parsed.error.issues.map((i) => i.message).join(", ") };
+  }
+  const data = parsed.data;
+  if (!data.id) return { ok: false, error: "Post-ID fehlt." };
+
+  const cleanHtml = sanitizeAndRestrict(data.contentHtml ?? "");
+  const desiredSlug = data.slug?.trim() ? toSlug(data.slug.trim()) : toSlug(data.title);
+  const slug = await ensureUniqueSlug(desiredSlug, data.id);
+  const reading = computeReadingMinutes(cleanHtml);
+
+  await db
+    .update(blogPosts)
+    .set({
+      title: data.title.trim(),
+      slug,
+      excerpt: data.excerpt?.trim() || null,
+      contentHtml: cleanHtml,
+      contentJson: (data.contentJson ?? null) as never,
+      coverImageUrl: data.coverImageUrl?.trim() || null,
+      coverImageAlt: data.coverImageAlt?.trim() || null,
+      metaTitle: data.metaTitle?.trim() || null,
+      metaDescription: data.metaDescription?.trim() || null,
+      readingMinutes: reading,
+      updatedAt: new Date(),
+    })
+    .where(eq(blogPosts.id, data.id));
+
+  revalidatePath("/m/blog");
+  revalidatePath(`/m/blog/${data.id}`);
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${slug}`);
+
+  return { ok: true, slug };
+}
+
+export async function publishBlogPost(id: string): Promise<{ ok: boolean; error?: string }> {
+  const session = await requireManager();
+  const found = await db.select().from(blogPosts).where(eq(blogPosts.id, id)).limit(1);
+  const post = found[0];
+  if (!post) return { ok: false, error: "Beitrag nicht gefunden" };
+  if (!post.title || !post.contentHtml) return { ok: false, error: "Titel und Inhalt sind Pflicht." };
+
+  await db
+    .update(blogPosts)
+    .set({
+      status: "published",
+      publishedAt: post.publishedAt ?? new Date(),
+      updatedAt: new Date(),
+    })
+    .where(eq(blogPosts.id, id));
+
+  await db.insert(activityLog).values({
+    who: session.user?.name ?? session.user?.email ?? "Manager",
+    what: `Blog-Beitrag veröffentlicht: ${post.title} (/${post.slug})`,
+  });
+
+  revalidatePath("/m/blog");
+  revalidatePath(`/m/blog/${id}`);
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${post.slug}`);
+  return { ok: true };
+}
+
+export async function unpublishBlogPost(id: string): Promise<{ ok: boolean }> {
+  await requireManager();
+  await db
+    .update(blogPosts)
+    .set({ status: "draft", updatedAt: new Date() })
+    .where(eq(blogPosts.id, id));
+  revalidatePath("/m/blog");
+  revalidatePath(`/m/blog/${id}`);
+  revalidatePath("/blog");
+  return { ok: true };
+}
+
+export async function deleteBlogPost(id: string): Promise<void> {
+  const session = await requireManager();
+  const found = await db.select().from(blogPosts).where(eq(blogPosts.id, id)).limit(1);
+  await db.delete(blogPosts).where(eq(blogPosts.id, id));
+  if (found[0]) {
+    await db.insert(activityLog).values({
+      who: session.user?.name ?? session.user?.email ?? "Manager",
+      what: `Blog-Beitrag gelöscht: ${found[0].title}`,
+    });
+  }
+  revalidatePath("/m/blog");
+  revalidatePath("/blog");
+  redirect("/m/blog");
+}
