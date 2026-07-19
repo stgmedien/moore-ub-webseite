@@ -22,10 +22,15 @@ export default async function EditPage({ params }: Props) {
         slug: post.slug,
         excerpt: post.excerpt ?? "",
         contentHtml: post.contentHtml,
+        titleEn: post.titleEn ?? "",
+        excerptEn: post.excerptEn ?? "",
+        contentHtmlEn: post.contentHtmlEn ?? "",
         coverImageUrl: post.coverImageUrl ?? "",
         coverImageAlt: post.coverImageAlt ?? "",
         metaTitle: post.metaTitle ?? "",
         metaDescription: post.metaDescription ?? "",
+        metaTitleEn: post.metaTitleEn ?? "",
+        metaDescriptionEn: post.metaDescriptionEn ?? "",
         status: post.status,
       }}
     />

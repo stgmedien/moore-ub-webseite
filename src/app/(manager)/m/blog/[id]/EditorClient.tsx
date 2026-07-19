@@ -21,24 +21,36 @@ type Post = {
   slug: string;
   excerpt: string;
   contentHtml: string;
+  titleEn: string;
+  excerptEn: string;
+  contentHtmlEn: string;
   coverImageUrl: string;
   coverImageAlt: string;
   metaTitle: string;
   metaDescription: string;
+  metaTitleEn: string;
+  metaDescriptionEn: string;
   status: string;
 };
 
 export default function EditorClient({ post }: { post: Post }) {
   const router = useRouter();
+  const [editLang, setEditLang] = useState<"no" | "en">("no");
   const [title, setTitle] = useState(post.title);
   const [slug, setSlug] = useState(post.slug);
   const [excerpt, setExcerpt] = useState(post.excerpt);
   const [contentHtml, setContentHtml] = useState(post.contentHtml);
   const [contentJson, setContentJson] = useState<object | null>(null);
+  const [titleEn, setTitleEn] = useState(post.titleEn);
+  const [excerptEn, setExcerptEn] = useState(post.excerptEn);
+  const [contentHtmlEn, setContentHtmlEn] = useState(post.contentHtmlEn);
+  const [contentJsonEn, setContentJsonEn] = useState<object | null>(null);
   const [coverImageUrl, setCoverImageUrl] = useState(post.coverImageUrl);
   const [coverImageAlt, setCoverImageAlt] = useState(post.coverImageAlt);
   const [metaTitle, setMetaTitle] = useState(post.metaTitle);
   const [metaDescription, setMetaDescription] = useState(post.metaDescription);
+  const [metaTitleEn, setMetaTitleEn] = useState(post.metaTitleEn);
+  const [metaDescriptionEn, setMetaDescriptionEn] = useState(post.metaDescriptionEn);
   const [status, setStatus] = useState(post.status);
   const [coverUploading, setCoverUploading] = useState(false);
 
@@ -92,10 +104,16 @@ export default function EditorClient({ post }: { post: Post }) {
         excerpt: excerpt.trim() || null,
         contentHtml,
         contentJson: contentJson ?? undefined,
+        titleEn: titleEn.trim() || null,
+        excerptEn: excerptEn.trim() || null,
+        contentHtmlEn: contentHtmlEn.trim() || null,
+        contentJsonEn: contentJsonEn ?? undefined,
         coverImageUrl: coverImageUrl.trim() || null,
         coverImageAlt: coverImageAlt.trim() || null,
         metaTitle: metaTitle.trim() || null,
         metaDescription: metaDescription.trim() || null,
+        metaTitleEn: metaTitleEn.trim() || null,
+        metaDescriptionEn: metaDescriptionEn.trim() || null,
         status: status as "draft" | "published" | "archived",
       });
       if (!res.ok) {
@@ -183,41 +201,113 @@ export default function EditorClient({ post }: { post: Post }) {
 
       <div className="grid gap-8 mt-8 lg:grid-cols-[1fr_320px]">
         <div className="space-y-5">
-          <Input
-            id="title"
-            label="Titel"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="z. B. Moore UB vinner fylkesmesterskapet"
-            required
-          />
-          <Input
-            id="slug"
-            label="URL-Slug"
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-            hint="Leerlassen = automatisch aus Titel"
-          />
-          <Textarea
-            id="excerpt"
-            label="Teaser (optional, ~150 Zeichen)"
-            value={excerpt}
-            onChange={(e) => setExcerpt(e.target.value)}
-            hint="Wird im Feed und als Meta-Description verwendet"
-            rows={3}
-          />
-
-          <div>
-            <span className="text-sm font-medium text-[var(--color-wh-deep-green)] mb-1.5 block">Inhalt</span>
-            <Editor
-              initialHtml={contentHtml}
-              onChange={(html, json) => {
-                setContentHtml(html);
-                setContentJson(json);
-              }}
-              onUploadImage={uploadImage}
-            />
+          <div className="flex items-center gap-1 border-b border-[var(--color-wh-winter-grey)]">
+            <button
+              type="button"
+              onClick={() => setEditLang("no")}
+              className={`px-4 h-10 text-sm font-semibold border-b-2 -mb-px transition-colors ${
+                editLang === "no"
+                  ? "border-[var(--color-wh-deep-green)] text-[var(--color-wh-deep-green)]"
+                  : "border-transparent text-[var(--color-wh-fg-muted)] hover:text-[var(--color-wh-deep-green)]"
+              }`}
+            >
+              Norsk
+            </button>
+            <button
+              type="button"
+              onClick={() => setEditLang("en")}
+              className={`px-4 h-10 text-sm font-semibold border-b-2 -mb-px transition-colors ${
+                editLang === "en"
+                  ? "border-[var(--color-wh-deep-green)] text-[var(--color-wh-deep-green)]"
+                  : "border-transparent text-[var(--color-wh-fg-muted)] hover:text-[var(--color-wh-deep-green)]"
+              }`}
+            >
+              Engelsk{" "}
+              {!titleEn.trim() && !contentHtmlEn.trim() && (
+                <span className="text-xs font-normal text-[var(--color-wh-fg-muted)]">(leer)</span>
+              )}
+            </button>
           </div>
+
+          {editLang === "no" ? (
+            <>
+              <Input
+                id="title"
+                label="Titel (Norwegisch)"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="z. B. Moore UB vinner fylkesmesterskapet"
+                required
+              />
+              <Input
+                id="slug"
+                label="URL-Slug"
+                value={slug}
+                onChange={(e) => setSlug(e.target.value)}
+                hint="Leerlassen = automatisch aus Titel"
+              />
+              <Textarea
+                id="excerpt"
+                label="Teaser (optional, ~150 Zeichen)"
+                value={excerpt}
+                onChange={(e) => setExcerpt(e.target.value)}
+                hint="Wird im Feed und als Meta-Description verwendet"
+                rows={3}
+              />
+
+              <div>
+                <span className="text-sm font-medium text-[var(--color-wh-deep-green)] mb-1.5 block">
+                  Inhalt (Norwegisch)
+                </span>
+                <Editor
+                  key="editor-no"
+                  initialHtml={contentHtml}
+                  onChange={(html, json) => {
+                    setContentHtml(html);
+                    setContentJson(json);
+                  }}
+                  onUploadImage={uploadImage}
+                />
+              </div>
+            </>
+          ) : (
+            <>
+              <Input
+                id="titleEn"
+                label="Titel (Englisch)"
+                value={titleEn}
+                onChange={(e) => setTitleEn(e.target.value)}
+                placeholder="e.g. Moore UB wins the county championship"
+                hint="Leer = norwegischer Titel wird angezeigt"
+              />
+              <Textarea
+                id="excerptEn"
+                label="Teaser (Englisch, optional)"
+                value={excerptEn}
+                onChange={(e) => setExcerptEn(e.target.value)}
+                hint="Leer = norwegischer Teaser wird angezeigt"
+                rows={3}
+              />
+
+              <div>
+                <span className="text-sm font-medium text-[var(--color-wh-deep-green)] mb-1.5 block">
+                  Inhalt (Englisch)
+                </span>
+                <Editor
+                  key="editor-en"
+                  initialHtml={contentHtmlEn}
+                  onChange={(html, json) => {
+                    setContentHtmlEn(html);
+                    setContentJsonEn(json);
+                  }}
+                  onUploadImage={uploadImage}
+                />
+                <p className="text-xs text-[var(--color-wh-fg-muted)] mt-2 m-0">
+                  Leer lassen = englische Besucher sehen den norwegischen Inhalt.
+                </p>
+              </div>
+            </>
+          )}
         </div>
 
         <aside className="space-y-5">
@@ -252,23 +342,48 @@ export default function EditorClient({ post }: { post: Post }) {
           </section>
 
           <section className="bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-5">
-            <h3 className="m-0 mb-3 text-[18px]">SEO</h3>
-            <Input
-              id="metaTitle"
-              label="Meta-Titel"
-              value={metaTitle}
-              onChange={(e) => setMetaTitle(e.target.value)}
-              hint="Leer = Titel verwenden"
-            />
-            <Textarea
-              id="metaDescription"
-              label="Meta-Beschreibung"
-              value={metaDescription}
-              onChange={(e) => setMetaDescription(e.target.value)}
-              hint="Leer = Teaser verwenden"
-              rows={3}
-              className="mt-3"
-            />
+            <h3 className="m-0 mb-3 text-[18px]">
+              SEO {editLang === "en" ? "(Englisch)" : "(Norwegisch)"}
+            </h3>
+            {editLang === "no" ? (
+              <>
+                <Input
+                  id="metaTitle"
+                  label="Meta-Titel"
+                  value={metaTitle}
+                  onChange={(e) => setMetaTitle(e.target.value)}
+                  hint="Leer = Titel verwenden"
+                />
+                <Textarea
+                  id="metaDescription"
+                  label="Meta-Beschreibung"
+                  value={metaDescription}
+                  onChange={(e) => setMetaDescription(e.target.value)}
+                  hint="Leer = Teaser verwenden"
+                  rows={3}
+                  className="mt-3"
+                />
+              </>
+            ) : (
+              <>
+                <Input
+                  id="metaTitleEn"
+                  label="Meta-Titel (EN)"
+                  value={metaTitleEn}
+                  onChange={(e) => setMetaTitleEn(e.target.value)}
+                  hint="Leer = norwegischer Meta-Titel"
+                />
+                <Textarea
+                  id="metaDescriptionEn"
+                  label="Meta-Beschreibung (EN)"
+                  value={metaDescriptionEn}
+                  onChange={(e) => setMetaDescriptionEn(e.target.value)}
+                  hint="Leer = norwegische Meta-Beschreibung"
+                  rows={3}
+                  className="mt-3"
+                />
+              </>
+            )}
           </section>
 
           <section className="bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-5">

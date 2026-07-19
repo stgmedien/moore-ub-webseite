@@ -393,6 +393,11 @@ export const blogPosts = pgTable(
     excerpt: text("excerpt"),
     contentHtml: text("content_html").notNull().default(""),
     contentJson: jsonb("content_json"), // TipTap doc state
+    // Englische Version (optional) — leer = Fallback auf Norwegisch
+    titleEn: varchar("title_en", { length: 255 }),
+    excerptEn: text("excerpt_en"),
+    contentHtmlEn: text("content_html_en"),
+    contentJsonEn: jsonb("content_json_en"),
     coverImageUrl: text("cover_image_url"),
     coverImageAlt: varchar("cover_image_alt", { length: 500 }),
     authorId: uuid("author_id").references(() => users.id, { onDelete: "set null" }),
@@ -400,6 +405,8 @@ export const blogPosts = pgTable(
     publishedAt: timestamp("published_at"),
     metaTitle: varchar("meta_title", { length: 255 }),
     metaDescription: text("meta_description"),
+    metaTitleEn: varchar("meta_title_en", { length: 255 }),
+    metaDescriptionEn: text("meta_description_en"),
     readingMinutes: integer("reading_minutes").notNull().default(1),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
