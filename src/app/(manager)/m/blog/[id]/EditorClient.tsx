@@ -66,7 +66,7 @@ export default function EditorClient({ post }: { post: Post }) {
     const MAX_BYTES = 8 * 1024 * 1024;
     if (file.size > MAX_BYTES) {
       throw new Error(
-        `Datei zu groß (${Math.round(file.size / 1024 / 1024)} MB). Maximal 8 MB.`
+        `File too large (${Math.round(file.size / 1024 / 1024)} MB). Maximum 8 MB.`
       );
     }
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_").slice(0, 80);
@@ -88,7 +88,7 @@ export default function EditorClient({ post }: { post: Post }) {
       setCoverImageUrl(url);
       if (!coverImageAlt) setCoverImageAlt(file.name.replace(/\.[^.]+$/, ""));
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Upload fehlgeschlagen");
+      setError(err instanceof Error ? err.message : "Upload failed");
     } finally {
       setCoverUploading(false);
     }
@@ -99,7 +99,7 @@ export default function EditorClient({ post }: { post: Post }) {
     startSave(async () => {
       const res = await saveBlogPost({
         id: post.id,
-        title: title.trim() || "(ohne Titel)",
+        title: title.trim() || "(untitled)",
         slug: slug.trim() || undefined,
         excerpt: excerpt.trim() || null,
         contentHtml,
@@ -135,7 +135,7 @@ export default function EditorClient({ post }: { post: Post }) {
         } else {
           const res = await publishBlogPost(post.id);
           if (!res.ok) {
-            setError(res.error ?? "Fehler beim Veröffentlichen");
+            setError(res.error ?? "Publishing failed");
             return;
           }
           setStatus("published");
@@ -146,7 +146,7 @@ export default function EditorClient({ post }: { post: Post }) {
   };
 
   const onDelete = () => {
-    if (!confirm("Beitrag wirklich löschen? Das kann nicht rückgängig gemacht werden.")) return;
+    if (!confirm("Really delete this post? This cannot be undone.")) return;
     startDel(async () => {
       await deleteBlogPost(post.id);
     });
@@ -157,14 +157,14 @@ export default function EditorClient({ post }: { post: Post }) {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
           <Link href="/m/blog" className="text-sm text-[var(--color-wh-fg-muted)] no-underline">
-            ← Alle Beiträge
+            ← All posts
           </Link>
-          <div className="eyebrow mt-2">Beitrag bearbeiten</div>
+          <div className="eyebrow mt-2">Edit post</div>
         </div>
         <div className="flex flex-wrap gap-2 items-center">
           {savedAt && (
             <span className="text-xs text-[var(--color-wh-fg-muted)]">
-              Gespeichert {savedAt.toLocaleTimeString("de-DE")}
+              Saved {savedAt.toLocaleTimeString("en-GB")}
             </span>
           )}
           <Link
@@ -172,7 +172,7 @@ export default function EditorClient({ post }: { post: Post }) {
             target="_blank"
             className="inline-flex h-10 px-4 items-center gap-1.5 rounded-[var(--radius-btn)] border border-[var(--color-wh-winter-grey)] text-sm font-semibold text-[var(--color-wh-deep-green)] no-underline hover:bg-[var(--color-wh-green-soft)]"
           >
-            <Eye size={16} /> Vorschau <ExternalLink size={12} />
+            <Eye size={16} /> Preview <ExternalLink size={12} />
           </Link>
           <Button
             type="button"
@@ -181,14 +181,14 @@ export default function EditorClient({ post }: { post: Post }) {
             onClick={() => save()}
             iconLeft={savePending ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
           >
-            Speichern
+            Save
           </Button>
           <Button
             type="button"
             disabled={pubPending || savePending}
             onClick={togglePublish}
           >
-            {pubPending ? "..." : status === "published" ? "Zurückziehen" : "Veröffentlichen"}
+            {pubPending ? "..." : status === "published" ? "Unpublish" : "Publish"}
           </Button>
         </div>
       </div>
@@ -211,7 +211,7 @@ export default function EditorClient({ post }: { post: Post }) {
                   : "border-transparent text-[var(--color-wh-fg-muted)] hover:text-[var(--color-wh-deep-green)]"
               }`}
             >
-              Norsk
+              Norwegian
             </button>
             <button
               type="button"
@@ -222,9 +222,9 @@ export default function EditorClient({ post }: { post: Post }) {
                   : "border-transparent text-[var(--color-wh-fg-muted)] hover:text-[var(--color-wh-deep-green)]"
               }`}
             >
-              Engelsk{" "}
+              English{" "}
               {!titleEn.trim() && !contentHtmlEn.trim() && (
-                <span className="text-xs font-normal text-[var(--color-wh-fg-muted)]">(leer)</span>
+                <span className="text-xs font-normal text-[var(--color-wh-fg-muted)]">(empty)</span>
               )}
             </button>
           </div>
@@ -233,31 +233,31 @@ export default function EditorClient({ post }: { post: Post }) {
             <>
               <Input
                 id="title"
-                label="Titel (Norwegisch)"
+                label="Title (Norwegian)"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                placeholder="z. B. Moore UB vinner fylkesmesterskapet"
+                placeholder="e.g. Moore UB vinner fylkesmesterskapet"
                 required
               />
               <Input
                 id="slug"
-                label="URL-Slug"
+                label="URL slug"
                 value={slug}
                 onChange={(e) => setSlug(e.target.value)}
-                hint="Leerlassen = automatisch aus Titel"
+                hint="Leave empty = generated from title"
               />
               <Textarea
                 id="excerpt"
-                label="Teaser (optional, ~150 Zeichen)"
+                label="Teaser (optional, ~150 characters)"
                 value={excerpt}
                 onChange={(e) => setExcerpt(e.target.value)}
-                hint="Wird im Feed und als Meta-Description verwendet"
+                hint="Used in the feed and as meta description"
                 rows={3}
               />
 
               <div>
                 <span className="text-sm font-medium text-[var(--color-wh-deep-green)] mb-1.5 block">
-                  Inhalt (Norwegisch)
+                  Content (Norwegian)
                 </span>
                 <Editor
                   key="editor-no"
@@ -274,24 +274,24 @@ export default function EditorClient({ post }: { post: Post }) {
             <>
               <Input
                 id="titleEn"
-                label="Titel (Englisch)"
+                label="Title (English)"
                 value={titleEn}
                 onChange={(e) => setTitleEn(e.target.value)}
                 placeholder="e.g. Moore UB wins the county championship"
-                hint="Leer = norwegischer Titel wird angezeigt"
+                hint="Empty = Norwegian title is shown"
               />
               <Textarea
                 id="excerptEn"
-                label="Teaser (Englisch, optional)"
+                label="Teaser (English, optional)"
                 value={excerptEn}
                 onChange={(e) => setExcerptEn(e.target.value)}
-                hint="Leer = norwegischer Teaser wird angezeigt"
+                hint="Empty = Norwegian teaser is shown"
                 rows={3}
               />
 
               <div>
                 <span className="text-sm font-medium text-[var(--color-wh-deep-green)] mb-1.5 block">
-                  Inhalt (Englisch)
+                  Content (English)
                 </span>
                 <Editor
                   key="editor-en"
@@ -303,7 +303,7 @@ export default function EditorClient({ post }: { post: Post }) {
                   onUploadImage={uploadImage}
                 />
                 <p className="text-xs text-[var(--color-wh-fg-muted)] mt-2 m-0">
-                  Leer lassen = englische Besucher sehen den norwegischen Inhalt.
+                  Leave empty = English visitors see the Norwegian content.
                 </p>
               </div>
             </>
@@ -312,7 +312,7 @@ export default function EditorClient({ post }: { post: Post }) {
 
         <aside className="space-y-5">
           <section className="bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-5">
-            <h3 className="m-0 mb-3 text-[18px]">Cover-Bild</h3>
+            <h3 className="m-0 mb-3 text-[18px]">Cover image</h3>
             {coverImageUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -327,13 +327,13 @@ export default function EditorClient({ post }: { post: Post }) {
             )}
             <label className="inline-flex h-10 px-4 items-center gap-2 rounded-md bg-[var(--color-wh-deep-green)] text-[var(--color-wh-snow)] text-sm font-semibold cursor-pointer hover:bg-[var(--color-wh-deep-green-hover)] transition-colors w-full justify-center">
               {coverUploading ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-              {coverUploading ? "Hochladen..." : "Bild hochladen"}
+              {coverUploading ? "Uploading..." : "Upload image"}
               <input type="file" accept="image/*" className="hidden" onChange={onPickCover} disabled={coverUploading} />
             </label>
             {coverImageUrl && (
               <Input
                 id="coverAlt"
-                label="Alt-Text (Pflicht für SEO)"
+                label="Alt text (required for SEO)"
                 value={coverImageAlt}
                 onChange={(e) => setCoverImageAlt(e.target.value)}
                 className="mt-3"
@@ -343,23 +343,23 @@ export default function EditorClient({ post }: { post: Post }) {
 
           <section className="bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-5">
             <h3 className="m-0 mb-3 text-[18px]">
-              SEO {editLang === "en" ? "(Englisch)" : "(Norwegisch)"}
+              SEO {editLang === "en" ? "(English)" : "(Norwegian)"}
             </h3>
             {editLang === "no" ? (
               <>
                 <Input
                   id="metaTitle"
-                  label="Meta-Titel"
+                  label="Meta title"
                   value={metaTitle}
                   onChange={(e) => setMetaTitle(e.target.value)}
-                  hint="Leer = Titel verwenden"
+                  hint="Empty = use title"
                 />
                 <Textarea
                   id="metaDescription"
-                  label="Meta-Beschreibung"
+                  label="Meta description"
                   value={metaDescription}
                   onChange={(e) => setMetaDescription(e.target.value)}
-                  hint="Leer = Teaser verwenden"
+                  hint="Empty = use teaser"
                   rows={3}
                   className="mt-3"
                 />
@@ -368,17 +368,17 @@ export default function EditorClient({ post }: { post: Post }) {
               <>
                 <Input
                   id="metaTitleEn"
-                  label="Meta-Titel (EN)"
+                  label="Meta title (EN)"
                   value={metaTitleEn}
                   onChange={(e) => setMetaTitleEn(e.target.value)}
-                  hint="Leer = norwegischer Meta-Titel"
+                  hint="Empty = Norwegian meta title"
                 />
                 <Textarea
                   id="metaDescriptionEn"
-                  label="Meta-Beschreibung (EN)"
+                  label="Meta description (EN)"
                   value={metaDescriptionEn}
                   onChange={(e) => setMetaDescriptionEn(e.target.value)}
-                  hint="Leer = norwegische Meta-Beschreibung"
+                  hint="Empty = Norwegian meta description"
                   rows={3}
                   className="mt-3"
                 />
@@ -393,17 +393,17 @@ export default function EditorClient({ post }: { post: Post }) {
               onChange={(e) => setStatus(e.target.value)}
               className="w-full h-11 px-4 rounded-md border border-[var(--color-wh-winter-grey)] bg-white"
             >
-              <option value="draft">Entwurf</option>
-              <option value="published">Veröffentlicht</option>
-              <option value="archived">Archiviert</option>
+              <option value="draft">Draft</option>
+              <option value="published">Published</option>
+              <option value="archived">Archived</option>
             </select>
             <p className="text-xs text-[var(--color-wh-fg-muted)] mt-2 m-0">
-              Status nimmt der Veröffentlichen-Button automatisch — hier nur falls Du archivieren willst.
+              The publish button sets the status automatically — use this only for archiving.
             </p>
           </section>
 
           <section className="bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-5">
-            <h3 className="m-0 mb-3 text-[18px] text-[var(--color-wh-sunset)]">Gefährliche Zone</h3>
+            <h3 className="m-0 mb-3 text-[18px] text-[var(--color-wh-sunset)]">Danger zone</h3>
             <button
               type="button"
               disabled={delPending}
@@ -411,7 +411,7 @@ export default function EditorClient({ post }: { post: Post }) {
               className="inline-flex h-10 px-4 items-center gap-2 rounded-md bg-[var(--color-wh-sunset)] text-[var(--color-wh-snow)] text-sm font-semibold cursor-pointer hover:bg-[var(--color-wh-sunset-hover)] transition-colors disabled:opacity-60"
             >
               {delPending ? <Loader2 size={16} className="animate-spin" /> : <Trash2 size={16} />}
-              Beitrag löschen
+              Delete post
             </button>
           </section>
         </aside>

@@ -7,7 +7,7 @@ export default function ManagerLoading() {
     <div
       className="p-5 sm:p-8 animate-pulse"
       role="status"
-      aria-label="Lädt …"
+      aria-label="Loading…"
     >
       {/* Kopfzeile */}
       <div className="h-3 w-20 rounded bg-[var(--color-wh-winter-grey)]/60 mb-3" />
@@ -42,7 +42,7 @@ export default function ManagerLoading() {
         ))}
       </div>
 
-      <span className="sr-only">Inhalt wird geladen …</span>
+      <span className="sr-only">Loading content…</span>
     </div>
   );
 }

@@ -23,9 +23,9 @@ const readMinutes = (html: string): number => {
 export async function importHtmlFile(formData: FormData): Promise<ImportResult> {
   const session = await requireManager();
   const file = formData.get("file");
-  if (!(file instanceof File)) return { ok: false, error: "Keine Datei." };
-  if (!/(html|htm|md)$/i.test(file.name)) return { ok: false, error: "Nur .html, .htm oder .md erlaubt." };
-  if (file.size > 5 * 1024 * 1024) return { ok: false, error: "Datei zu groß (max 5 MB)." };
+  if (!(file instanceof File)) return { ok: false, error: "No file." };
+  if (!/(html|htm|md)$/i.test(file.name)) return { ok: false, error: "Only .html, .htm or .md allowed." };
+  if (file.size > 5 * 1024 * 1024) return { ok: false, error: "File too large (max 5 MB)." };
 
   const raw = await file.text();
   const parsed = parseHtmlForImport(raw);
@@ -53,7 +53,7 @@ export async function importHtmlFile(formData: FormData): Promise<ImportResult> 
 
   await db.insert(activityLog).values({
     who: session.user?.name ?? session.user?.email ?? "Manager",
-    what: `Blog-Beitrag aus HTML-Datei importiert: ${title}`,
+    what: `Blog post imported from HTML file: ${title}`,
   });
 
   revalidatePath("/m/blog");

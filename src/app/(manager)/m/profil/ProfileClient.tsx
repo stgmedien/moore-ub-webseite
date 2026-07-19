@@ -46,11 +46,11 @@ export default function ProfileClient({ me, forced }: { me: Me; forced: boolean 
           <AlertTriangle className="text-[var(--color-wh-sunset)] shrink-0 mt-0.5" size={18} />
           <div>
             <div className="font-semibold text-[var(--color-wh-sunset)]">
-              Passwort-Wechsel erforderlich
+              Password change required
             </div>
             <p className="text-sm text-[var(--color-wh-black)] m-0 mt-1">
-              Bevor Du andere Bereiche nutzen kannst, ändere bitte Dein Passwort. Solange dieser
-              Hinweis steht, leiten wir Dich zu dieser Seite zurück.
+              Please change your password before using other areas. As long as this
+              notice is shown, you will be redirected back to this page.
             </p>
           </div>
         </div>
@@ -67,15 +67,15 @@ export default function ProfileClient({ me, forced }: { me: Me; forced: boolean 
       />
 
       <section className="bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-6">
-        <h3 className="m-0 mb-2 text-[18px]">Login-Aktivität</h3>
+        <h3 className="m-0 mb-2 text-[18px]">Login activity</h3>
         <p className="m-0 text-sm text-[var(--color-wh-fg-muted)]">
-          Letzter Login:{" "}
+          Last login:{" "}
           {me.lastLoginAt
-            ? new Date(me.lastLoginAt).toLocaleString("de-DE", {
+            ? new Date(me.lastLoginAt).toLocaleString("en-GB", {
                 dateStyle: "medium",
                 timeStyle: "short",
               })
-            : "noch nie"}
+            : "never"}
         </p>
       </section>
     </div>
@@ -123,7 +123,7 @@ function NameSection({ initial }: { initial: string }) {
     setError(null);
     start(async () => {
       const r = await updateMyName(name);
-      if (!r.ok) setError(r.error ?? "Fehler");
+      if (!r.ok) setError(r.error ?? "Error");
       else {
         setSavedAt(new Date());
         router.refresh();
@@ -132,16 +132,16 @@ function NameSection({ initial }: { initial: string }) {
   };
 
   return (
-    <Card icon={<User size={18} className="text-[var(--color-wh-deep-green)]" />} title="Anzeigename">
+    <Card icon={<User size={18} className="text-[var(--color-wh-deep-green)]" />} title="Display name">
       <form onSubmit={submit} className="flex flex-col sm:flex-row gap-3">
         <Input id="name" value={name} onChange={(e) => setName(e.target.value)} className="flex-1" />
         <Button type="submit" disabled={pending || name === initial}>
-          {pending ? <Loader2 size={16} className="animate-spin" /> : "Speichern"}
+          {pending ? <Loader2 size={16} className="animate-spin" /> : "Save"}
         </Button>
       </form>
       {savedAt && (
         <div className="mt-2 text-xs text-[var(--color-wh-deep-green)] inline-flex items-center gap-1.5">
-          <Check size={12} /> Gespeichert
+          <Check size={12} /> Saved
         </div>
       )}
       {error && <div className="mt-2 text-sm text-[var(--color-wh-sunset)]">{error}</div>}
@@ -162,12 +162,12 @@ function PasswordSection({ forced }: { forced: boolean }) {
     e.preventDefault();
     setError(null);
     setSuccess(false);
-    if (next.length < 8) return setError("Neues Passwort: mind. 8 Zeichen.");
-    if (next !== confirm) return setError("Bestätigung stimmt nicht überein.");
+    if (next.length < 8) return setError("New password: at least 8 characters.");
+    if (next !== confirm) return setError("Confirmation does not match.");
     start(async () => {
       const r = await changeMyPassword({ current, next });
       if (!r.ok) {
-        setError(r.error ?? "Fehler");
+        setError(r.error ?? "Error");
         return;
       }
       setSuccess(true);
@@ -181,18 +181,18 @@ function PasswordSection({ forced }: { forced: boolean }) {
   return (
     <Card
       icon={<KeyRound size={18} className="text-[var(--color-wh-deep-green)]" />}
-      title="Passwort ändern"
+      title="Change password"
       description={
         forced
-          ? "Aktuelles Passwort ist nur einmal gültig — bitte jetzt ein neues setzen."
-          : "Aktuelles Passwort eingeben, dann das neue. Bestätigung beugt Tippfehlern vor."
+          ? "Your current password is valid only once — please set a new one now."
+          : "Enter your current password, then the new one. The confirmation prevents typos."
       }
     >
       <form onSubmit={submit} className="space-y-3">
         <Input
           id="current"
           type="password"
-          label="Aktuelles Passwort"
+          label="Current password"
           autoComplete="current-password"
           value={current}
           onChange={(e) => setCurrent(e.target.value)}
@@ -201,7 +201,7 @@ function PasswordSection({ forced }: { forced: boolean }) {
         <Input
           id="next"
           type="password"
-          label="Neues Passwort (mind. 8 Zeichen)"
+          label="New password (min. 8 characters)"
           autoComplete="new-password"
           value={next}
           onChange={(e) => setNext(e.target.value)}
@@ -211,7 +211,7 @@ function PasswordSection({ forced }: { forced: boolean }) {
         <Input
           id="confirm"
           type="password"
-          label="Neues Passwort bestätigen"
+          label="Confirm new password"
           autoComplete="new-password"
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
@@ -225,12 +225,12 @@ function PasswordSection({ forced }: { forced: boolean }) {
         )}
         {success && (
           <div className="text-sm text-[var(--color-wh-deep-green)] bg-[var(--color-wh-green-soft)] px-3 py-2 rounded-md inline-flex items-center gap-1.5">
-            <Check size={14} /> Passwort geändert.
+            <Check size={14} /> Password changed.
           </div>
         )}
         <div className="flex justify-end">
           <Button type="submit" disabled={pending}>
-            {pending ? <Loader2 size={16} className="animate-spin" /> : "Passwort speichern"}
+            {pending ? <Loader2 size={16} className="animate-spin" /> : "Save password"}
           </Button>
         </div>
       </form>
@@ -252,7 +252,7 @@ function EmailSection({ currentEmail }: { currentEmail: string }) {
     start(async () => {
       const r = await requestEmailChange({ newEmail, password });
       if (!r.ok) {
-        setError(r.error ?? "Fehler");
+        setError(r.error ?? "Error");
         return;
       }
       setSent(true);
@@ -264,17 +264,17 @@ function EmailSection({ currentEmail }: { currentEmail: string }) {
   return (
     <Card
       icon={<Mail size={18} className="text-[var(--color-wh-deep-green)]" />}
-      title="E-Mail-Adresse ändern"
-      description="Aktuell: einloggen geht mit dieser Adresse. Wir schicken einen Bestätigungs-Link an die neue Adresse — der Wechsel wird erst aktiv, wenn Du dort klickst."
+      title="Change e-mail address"
+      description="You currently sign in with this address. We send a confirmation link to the new address — the change only takes effect once you click it."
     >
       <div className="text-sm text-[var(--color-wh-fg-muted)] mb-3">
-        Aktuell: <strong className="text-[var(--color-wh-deep-green)]">{currentEmail}</strong>
+        Current: <strong className="text-[var(--color-wh-deep-green)]">{currentEmail}</strong>
       </div>
       <form onSubmit={submit} className="space-y-3">
         <Input
           id="new-email"
           type="email"
-          label="Neue E-Mail-Adresse"
+          label="New e-mail address"
           autoComplete="email"
           value={newEmail}
           onChange={(e) => setNewEmail(e.target.value)}
@@ -283,7 +283,7 @@ function EmailSection({ currentEmail }: { currentEmail: string }) {
         <Input
           id="email-pw"
           type="password"
-          label="Aktuelles Passwort (zur Bestätigung)"
+          label="Current password (for confirmation)"
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -296,13 +296,13 @@ function EmailSection({ currentEmail }: { currentEmail: string }) {
         )}
         {sent && (
           <div className="text-sm text-[var(--color-wh-deep-green)] bg-[var(--color-wh-green-soft)] px-3 py-2 rounded-md inline-flex items-center gap-1.5">
-            <Check size={14} /> Verifizierungs-Mail wurde an die neue Adresse geschickt. Klicke
-            dort innerhalb von 24 h auf den Link.
+            <Check size={14} /> A verification mail has been sent to the new address. Click
+            the link there within 24 h.
           </div>
         )}
         <div className="flex justify-end">
           <Button type="submit" disabled={pending}>
-            {pending ? <Loader2 size={16} className="animate-spin" /> : "Wechsel anfragen"}
+            {pending ? <Loader2 size={16} className="animate-spin" /> : "Request change"}
           </Button>
         </div>
       </form>
@@ -339,7 +339,7 @@ function TwoFactorSection({
     start(async () => {
       const r = await startTwoFactorSetup();
       if (!r.ok) {
-        setError(r.error ?? "Fehler");
+        setError(r.error ?? "Error");
         return;
       }
       setSecret(r.secret ?? null);
@@ -354,7 +354,7 @@ function TwoFactorSection({
     start(async () => {
       const r = await confirmTwoFactorSetup({ code });
       if (!r.ok) {
-        setError(r.error ?? "Fehler");
+        setError(r.error ?? "Error");
         return;
       }
       setBackupCodes(r.backupCodes ?? []);
@@ -372,7 +372,7 @@ function TwoFactorSection({
     start(async () => {
       const r = await disableTwoFactor({ password: disablePw, code: disableCode });
       if (!r.ok) {
-        setError(r.error ?? "Fehler");
+        setError(r.error ?? "Error");
         return;
       }
       setDisableOpen(false);
@@ -391,13 +391,13 @@ function TwoFactorSection({
           <ShieldOff size={18} className="text-[var(--color-wh-deep-green)]" />
         )
       }
-      title={`Zwei-Faktor-Authentifizierung — ${enabled ? "aktiv" : "nicht aktiv"}`}
-      description="Schützt Deinen Account zusätzlich zum Passwort. 6-stelliger Code aus Authenticator-App (z. B. Google Authenticator, 1Password, Authy)."
+      title={`Two-factor authentication — ${enabled ? "active" : "not active"}`}
+      description="Protects your account in addition to the password. 6-digit code from an authenticator app (e.g. Google Authenticator, 1Password, Authy)."
     >
       {enabled ? (
         <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm text-[var(--color-wh-deep-green)] font-semibold">
-            <Check size={16} /> 2FA ist aktiv. {backupRemaining} Backup-Codes verbleibend.
+            <Check size={16} /> 2FA is active. {backupRemaining} backup codes remaining.
           </div>
           {!disableOpen ? (
             <button
@@ -405,20 +405,20 @@ function TwoFactorSection({
               onClick={() => setDisableOpen(true)}
               className="inline-flex h-10 px-4 items-center gap-2 rounded-md bg-white border border-[var(--color-wh-sunset)] text-[var(--color-wh-sunset)] text-sm font-semibold cursor-pointer hover:bg-[var(--color-wh-sunset)]/10"
             >
-              <ShieldOff size={14} /> 2FA deaktivieren
+              <ShieldOff size={14} /> Disable 2FA
             </button>
           ) : (
             <form onSubmit={submitDisable} className="space-y-3 bg-[var(--color-wh-snow)] p-4 rounded-md border border-[var(--color-wh-winter-grey)]">
               <div className="text-sm text-[var(--color-wh-fg-muted)]">
-                Zur Sicherheit: bitte aktuelles Passwort + 6-stelligen 2FA-Code eingeben.
+                For security: please enter your current password + 6-digit 2FA code.
               </div>
-              <Input id="disable-pw" type="password" label="Aktuelles Passwort" value={disablePw} onChange={(e) => setDisablePw(e.target.value)} required />
-              <Input id="disable-code" type="text" label="2FA-Code" value={disableCode} onChange={(e) => setDisableCode(e.target.value)} required inputMode="numeric" placeholder="123456" />
+              <Input id="disable-pw" type="password" label="Current password" value={disablePw} onChange={(e) => setDisablePw(e.target.value)} required />
+              <Input id="disable-code" type="text" label="2FA code" value={disableCode} onChange={(e) => setDisableCode(e.target.value)} required inputMode="numeric" placeholder="123456" />
               {error && <div className="text-sm text-[var(--color-wh-sunset)]">{error}</div>}
               <div className="flex gap-2 justify-end">
-                <Button type="button" variant="secondary" onClick={() => setDisableOpen(false)}>Abbrechen</Button>
+                <Button type="button" variant="secondary" onClick={() => setDisableOpen(false)}>Cancel</Button>
                 <Button type="submit" variant="danger" disabled={pending}>
-                  {pending ? <Loader2 size={16} className="animate-spin" /> : "2FA deaktivieren"}
+                  {pending ? <Loader2 size={16} className="animate-spin" /> : "Disable 2FA"}
                 </Button>
               </div>
             </form>
@@ -428,8 +428,8 @@ function TwoFactorSection({
         <div className="space-y-3">
           {role === "admin" && (
             <div className="bg-[var(--color-wh-sunset)]/10 border border-[var(--color-wh-sunset)]/30 rounded-md p-3 text-sm">
-              <strong className="text-[var(--color-wh-sunset)]">Empfehlung für Admins:</strong> 2FA
-              dringend einrichten — Du hast Zugriff auf Buchungen, Zahlungen und Nutzerverwaltung.
+              <strong className="text-[var(--color-wh-sunset)]">Recommendation for admins:</strong> please
+              set up 2FA urgently — you have access to content, mails and user management.
             </div>
           )}
 
@@ -441,31 +441,31 @@ function TwoFactorSection({
               className="inline-flex h-10 px-4 items-center gap-2 rounded-md bg-[var(--color-wh-deep-green)] text-[var(--color-wh-snow)] text-sm font-semibold cursor-pointer hover:bg-[var(--color-wh-deep-green-hover)]"
             >
               {pending ? <Loader2 size={14} className="animate-spin" /> : <Smartphone size={14} />}
-              2FA einrichten
+              Set up 2FA
             </button>
           ) : (
             <div className="bg-[var(--color-wh-snow)] p-4 rounded-md border border-[var(--color-wh-winter-grey)] space-y-4">
               <div>
-                <div className="font-semibold mb-2">1. QR-Code mit Authenticator-App scannen</div>
+                <div className="font-semibold mb-2">1. Scan the QR code with your authenticator app</div>
                 {otpUri && (
                   <div className="inline-block bg-white p-3 rounded">
                     <QRCode value={otpUri} size={180} />
                   </div>
                 )}
                 <div className="text-xs text-[var(--color-wh-fg-muted)] mt-2">
-                  Falls Du nicht scannen kannst, gib das Geheimnis manuell ein:
+                  If you cannot scan, enter the secret manually:
                 </div>
                 <code className="block mt-1 text-xs font-mono bg-white px-2 py-1.5 rounded border border-[var(--color-wh-winter-grey)] break-all">
                   {secret}
                 </code>
                 <div className="text-xs text-[var(--color-wh-fg-muted)] mt-1">
-                  Account-Name: <code>{userEmail}</code> · Issuer: <code>Moore UB</code>
+                  Account name: <code>{userEmail}</code> · Issuer: <code>Moore UB</code>
                 </div>
               </div>
 
               <form onSubmit={confirmSetup} className="space-y-3">
                 <div>
-                  <div className="font-semibold mb-2">2. 6-stelligen Code aus der App eingeben</div>
+                  <div className="font-semibold mb-2">2. Enter the 6-digit code from the app</div>
                   <Input
                     id="totp-confirm"
                     type="text"
@@ -478,9 +478,9 @@ function TwoFactorSection({
                 </div>
                 {error && <div className="text-sm text-[var(--color-wh-sunset)]">{error}</div>}
                 <div className="flex gap-2 justify-end">
-                  <Button type="button" variant="secondary" onClick={() => setSetupOpen(false)}>Abbrechen</Button>
+                  <Button type="button" variant="secondary" onClick={() => setSetupOpen(false)}>Cancel</Button>
                   <Button type="submit" disabled={pending}>
-                    {pending ? <Loader2 size={16} className="animate-spin" /> : "2FA aktivieren"}
+                    {pending ? <Loader2 size={16} className="animate-spin" /> : "Enable 2FA"}
                   </Button>
                 </div>
               </form>
@@ -516,12 +516,12 @@ function BackupCodesPanel({
       <div className="w-full max-w-[520px] bg-white rounded-[var(--radius-card)] shadow-[var(--shadow-deep)] p-6 space-y-4">
         <div className="flex items-center gap-2">
           <ShieldCheck className="text-[var(--color-wh-deep-green)]" size={22} />
-          <h3 className="m-0 text-[20px]">2FA aktiviert — Backup-Codes</h3>
+          <h3 className="m-0 text-[20px]">2FA enabled — backup codes</h3>
         </div>
         <p className="m-0 text-sm text-[var(--color-wh-fg-muted)] leading-relaxed">
-          Speichere diese 10 Codes <strong>jetzt</strong> sicher (Passwortmanager oder ausgedruckt
-          im Schrank). Mit jedem Code kannst Du Dich einmal ohne Authenticator-App einloggen — falls
-          Du Dein Telefon verlierst.
+          Store these 10 codes securely <strong>now</strong> (password manager or printed
+          in a drawer). Each code lets you sign in once without the authenticator app — in case
+          you lose your phone.
         </p>
         <div className="bg-[var(--color-wh-snow)] border border-[var(--color-wh-winter-grey)] rounded-md p-4 grid grid-cols-2 gap-2 font-mono text-sm">
           {codes.map((c) => (
@@ -541,10 +541,10 @@ function BackupCodesPanel({
             className="inline-flex h-10 px-4 items-center gap-2 rounded-md border border-[var(--color-wh-deep-green)] text-[var(--color-wh-deep-green)] text-sm font-semibold cursor-pointer"
           >
             {copied ? <Check size={14} /> : <Copy size={14} />}
-            {copied ? "Kopiert" : "Alle kopieren"}
+            {copied ? "Copied" : "Copy all"}
           </button>
           <Button type="button" onClick={onClose}>
-            Verstanden — bitte erneut einloggen
+            Got it — please sign in again
           </Button>
         </div>
       </div>

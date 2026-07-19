@@ -5,7 +5,7 @@ import { activityLog } from "@/lib/db/schema";
 import { and, ilike, desc, gte, lte, eq, sql, type SQL } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Audit-Log · Moore UB Manager" };
+export const metadata = { title: "Audit log · Moore UB Manager" };
 
 type Props = {
   searchParams: Promise<{
@@ -78,54 +78,54 @@ export default async function AuditPage({ searchParams }: Props) {
 
   return (
     <div className="px-4 sm:px-8 py-8 sm:py-10 max-w-[1280px]">
-      <div className="eyebrow">Sicherheit</div>
-      <h1 className="text-[40px] mt-2 mb-1">Audit-Log</h1>
+      <div className="eyebrow">Security</div>
+      <h1 className="text-[40px] mt-2 mb-1">Audit log</h1>
       <p className="text-[var(--color-wh-fg-muted)] m-0 mt-2 max-w-2xl">
-        Alle wichtigen Aktionen im Manager-Backend (Logins, Buchungs-Statuswechsel, Mail-Versand,
-        Nutzer-Mutationen, Cron-Läufe). Sichtbar nur für Admins.
+        All important actions in the manager backend (logins, booking status changes, mail delivery,
+        user mutations, cron runs). Visible to admins only.
       </p>
 
       <form method="get" className="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-4">
-        <FilterInput name="who" label="Wer (Name/E-Mail)" defaultValue={who} placeholder="z. B. Jonathan" />
-        <FilterInput name="what" label="Was (Volltextsuche)" defaultValue={what} placeholder="z. B. Storno" />
-        <FilterInput name="bookingId" label="Buchungs-UUID" defaultValue={bookingId} placeholder="optional" />
-        <FilterInput name="from" type="date" label="Von" defaultValue={from} />
-        <FilterInput name="to" type="date" label="Bis" defaultValue={to} />
+        <FilterInput name="who" label="Who (name/e-mail)" defaultValue={who} placeholder="e.g. Jonathan" />
+        <FilterInput name="what" label="What (full-text search)" defaultValue={what} placeholder="e.g. cancellation" />
+        <FilterInput name="bookingId" label="Booking UUID" defaultValue={bookingId} placeholder="optional" />
+        <FilterInput name="from" type="date" label="From" defaultValue={from} />
+        <FilterInput name="to" type="date" label="To" defaultValue={to} />
         <div className="lg:col-span-5 flex justify-end gap-2">
           <a
             href="/m/audit"
             className="inline-flex h-10 px-4 items-center rounded-[var(--radius-btn)] border border-[var(--color-wh-winter-grey)] text-sm font-semibold text-[var(--color-wh-deep-green)] no-underline hover:bg-[var(--color-wh-green-soft)]"
           >
-            Filter zurücksetzen
+            Reset filters
           </a>
           <button
             type="submit"
             className="inline-flex h-10 px-5 items-center rounded-[var(--radius-btn)] bg-[var(--color-wh-deep-green)] text-[var(--color-wh-snow)] text-sm font-semibold cursor-pointer"
           >
-            Filtern
+            Filter
           </button>
         </div>
       </form>
 
       <div className="mt-6 text-sm text-[var(--color-wh-fg-muted)]">
-        {total} Einträge · Seite {page} von {pages}
+        {total} entries · page {page} of {pages}
       </div>
 
       <div className="mt-3 bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-[var(--color-wh-snow)] border-b border-[var(--color-wh-winter-grey)] text-left">
             <tr>
-              <Th className="w-[160px]">Zeitpunkt</Th>
-              <Th className="w-[180px]">Wer</Th>
-              <Th>Was</Th>
-              <Th className="w-[280px]">Buchungs-Bezug</Th>
+              <Th className="w-[160px]">Time</Th>
+              <Th className="w-[180px]">Who</Th>
+              <Th>What</Th>
+              <Th className="w-[280px]">Booking reference</Th>
             </tr>
           </thead>
           <tbody>
             {rows.length === 0 && (
               <tr>
                 <td colSpan={4} className="px-4 py-8 text-center text-[var(--color-wh-fg-muted)]">
-                  Keine Einträge gefunden.
+                  No entries found.
                 </td>
               </tr>
             )}
@@ -135,7 +135,7 @@ export default async function AuditPage({ searchParams }: Props) {
                 className="border-b border-[var(--color-wh-winter-grey)] last:border-b-0 align-top"
               >
                 <Td className="text-xs text-[var(--color-wh-fg-muted)] font-mono whitespace-nowrap">
-                  {new Date(r.at).toLocaleString("de-DE", {
+                  {new Date(r.at).toLocaleString("en-GB", {
                     dateStyle: "short",
                     timeStyle: "medium",
                   })}
@@ -167,18 +167,18 @@ export default async function AuditPage({ searchParams }: Props) {
               href={buildPageHref(page - 1)}
               className="inline-flex h-10 px-4 items-center rounded-[var(--radius-btn)] border border-[var(--color-wh-winter-grey)] text-sm no-underline text-[var(--color-wh-deep-green)] hover:bg-[var(--color-wh-green-soft)]"
             >
-              ← Zurück
+              ← Previous
             </a>
           )}
           <span className="text-sm text-[var(--color-wh-fg-muted)] px-3">
-            Seite {page} / {pages}
+            Page {page} / {pages}
           </span>
           {page < pages && (
             <a
               href={buildPageHref(page + 1)}
               className="inline-flex h-10 px-4 items-center rounded-[var(--radius-btn)] border border-[var(--color-wh-winter-grey)] text-sm no-underline text-[var(--color-wh-deep-green)] hover:bg-[var(--color-wh-green-soft)]"
             >
-              Weiter →
+              Next →
             </a>
           )}
         </div>

@@ -25,7 +25,7 @@ export async function saveSiteSettings(
 
   await db.insert(activityLog).values({
     who: managerName,
-    what: `Reinigungspuffer auf ${parsed.data.cleaningDaysAfterDeparture} Tag(e) gesetzt`,
+    what: `Cleaning buffer set to ${parsed.data.cleaningDaysAfterDeparture} day(s)`,
   });
 
   // Pages, die die Settings nutzen, neu rendern

@@ -49,7 +49,7 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
       }),
       Placeholder.configure({
         placeholder:
-          "Hier den Beitrag schreiben — H2/H3 für Überschriften, Bilder per Drag & Drop oder Button …",
+          "Write the post here — H2/H3 for headings, images via drag & drop or the button…",
       }),
       Typography,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
@@ -76,7 +76,7 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
               editor?.chain().focus().setImage({ src: url, alt: file.name }).run();
             }
           } catch (err) {
-            setUploadError(err instanceof Error ? err.message : "Upload fehlgeschlagen.");
+            setUploadError(err instanceof Error ? err.message : "Upload failed.");
           } finally {
             setUploading(false);
           }
@@ -100,7 +100,7 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
               editor?.chain().focus().setImage({ src: url, alt: file.name }).run();
             }
           } catch (err) {
-            setUploadError(err instanceof Error ? err.message : "Upload fehlgeschlagen.");
+            setUploadError(err instanceof Error ? err.message : "Upload failed.");
           } finally {
             setUploading(false);
           }
@@ -135,7 +135,7 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
       const url = await onUploadImage(file);
       editor.chain().focus().setImage({ src: url, alt: file.name }).run();
     } catch (err) {
-      setUploadError(err instanceof Error ? err.message : "Upload fehlgeschlagen.");
+      setUploadError(err instanceof Error ? err.message : "Upload failed.");
     } finally {
       setUploading(false);
     }
@@ -182,28 +182,28 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
     <div className="border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] overflow-hidden bg-white">
       <div className="flex items-center justify-between gap-2 px-3 py-2 border-b border-[var(--color-wh-winter-grey)] bg-[var(--color-wh-snow)]">
         <div className="flex flex-wrap items-center gap-1">
-          <Btn title="Rückgängig" onClick={() => editor.chain().focus().undo().run()}><Undo size={16} /></Btn>
-          <Btn title="Wiederholen" onClick={() => editor.chain().focus().redo().run()}><Redo size={16} /></Btn>
+          <Btn title="Undo" onClick={() => editor.chain().focus().undo().run()}><Undo size={16} /></Btn>
+          <Btn title="Redo" onClick={() => editor.chain().focus().redo().run()}><Redo size={16} /></Btn>
           <span className="w-px h-6 bg-[var(--color-wh-winter-grey)] mx-1" />
           <Btn title="H2" active={editor.isActive("heading", { level: 2 })} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}><Heading2 size={16} /></Btn>
           <Btn title="H3" active={editor.isActive("heading", { level: 3 })} onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}><Heading3 size={16} /></Btn>
           <span className="w-px h-6 bg-[var(--color-wh-winter-grey)] mx-1" />
-          <Btn title="Fett" active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}><Bold size={16} /></Btn>
-          <Btn title="Kursiv" active={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><Italic size={16} /></Btn>
-          <Btn title="Unterstrichen" active={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}><UnderlineIcon size={16} /></Btn>
-          <Btn title="Durchgestrichen" active={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}><Strikethrough size={16} /></Btn>
+          <Btn title="Bold" active={editor.isActive("bold")} onClick={() => editor.chain().focus().toggleBold().run()}><Bold size={16} /></Btn>
+          <Btn title="Italic" active={editor.isActive("italic")} onClick={() => editor.chain().focus().toggleItalic().run()}><Italic size={16} /></Btn>
+          <Btn title="Underline" active={editor.isActive("underline")} onClick={() => editor.chain().focus().toggleUnderline().run()}><UnderlineIcon size={16} /></Btn>
+          <Btn title="Strikethrough" active={editor.isActive("strike")} onClick={() => editor.chain().focus().toggleStrike().run()}><Strikethrough size={16} /></Btn>
           <span className="w-px h-6 bg-[var(--color-wh-winter-grey)] mx-1" />
-          <Btn title="Liste" active={editor.isActive("bulletList")} onClick={() => editor.chain().focus().toggleBulletList().run()}><List size={16} /></Btn>
-          <Btn title="Nummeriert" active={editor.isActive("orderedList")} onClick={() => editor.chain().focus().toggleOrderedList().run()}><ListOrdered size={16} /></Btn>
-          <Btn title="Zitat" active={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()}><Quote size={16} /></Btn>
-          <Btn title="Code-Block" active={editor.isActive("codeBlock")} onClick={() => editor.chain().focus().toggleCodeBlock().run()}><Code size={16} /></Btn>
+          <Btn title="Bullet list" active={editor.isActive("bulletList")} onClick={() => editor.chain().focus().toggleBulletList().run()}><List size={16} /></Btn>
+          <Btn title="Numbered list" active={editor.isActive("orderedList")} onClick={() => editor.chain().focus().toggleOrderedList().run()}><ListOrdered size={16} /></Btn>
+          <Btn title="Quote" active={editor.isActive("blockquote")} onClick={() => editor.chain().focus().toggleBlockquote().run()}><Quote size={16} /></Btn>
+          <Btn title="Code block" active={editor.isActive("codeBlock")} onClick={() => editor.chain().focus().toggleCodeBlock().run()}><Code size={16} /></Btn>
           <span className="w-px h-6 bg-[var(--color-wh-winter-grey)] mx-1" />
-          <Btn title="Links" active={editor.isActive({ textAlign: "left" })} onClick={() => editor.chain().focus().setTextAlign("left").run()}><AlignLeft size={16} /></Btn>
-          <Btn title="Mitte" active={editor.isActive({ textAlign: "center" })} onClick={() => editor.chain().focus().setTextAlign("center").run()}><AlignCenter size={16} /></Btn>
-          <Btn title="Rechts" active={editor.isActive({ textAlign: "right" })} onClick={() => editor.chain().focus().setTextAlign("right").run()}><AlignRight size={16} /></Btn>
+          <Btn title="Align left" active={editor.isActive({ textAlign: "left" })} onClick={() => editor.chain().focus().setTextAlign("left").run()}><AlignLeft size={16} /></Btn>
+          <Btn title="Align center" active={editor.isActive({ textAlign: "center" })} onClick={() => editor.chain().focus().setTextAlign("center").run()}><AlignCenter size={16} /></Btn>
+          <Btn title="Align right" active={editor.isActive({ textAlign: "right" })} onClick={() => editor.chain().focus().setTextAlign("right").run()}><AlignRight size={16} /></Btn>
           <span className="w-px h-6 bg-[var(--color-wh-winter-grey)] mx-1" />
           <Btn
-            title="Link einfügen"
+            title="Insert link"
             active={editor.isActive("link")}
             onClick={() => {
               setLinkUrl(editor.getAttributes("link").href ?? "");
@@ -213,7 +213,7 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
             <LinkIcon size={16} />
           </Btn>
           <Btn
-            title={uploading ? "Bild wird hochgeladen ..." : "Bild einfügen"}
+            title={uploading ? "Uploading image..." : "Insert image"}
             onClick={() => fileInputRef.current?.click()}
           >
             <ImageIcon size={16} />
@@ -265,29 +265,29 @@ export const Editor = ({ initialHtml, onChange, onUploadImage }: Props) => {
             }}
           />
           <button type="button" onClick={applyLink} className="h-9 px-4 rounded-md bg-[var(--color-wh-deep-green)] text-[var(--color-wh-snow)] text-sm font-semibold cursor-pointer">
-            Link setzen
+            Set link
           </button>
           <button type="button" onClick={() => { editor.chain().focus().unsetLink().run(); setLinkOpen(false); }} className="h-9 px-3 rounded-md border border-[var(--color-wh-winter-grey)] text-sm cursor-pointer">
-            Entfernen
+            Remove
           </button>
         </div>
       )}
 
       {uploading && (
         <div className="px-3 py-2 bg-[var(--color-wh-green-soft)] text-[var(--color-wh-deep-green)] text-sm font-medium">
-          Bild wird hochgeladen ...
+          Uploading image...
         </div>
       )}
 
       {uploadError && (
         <div className="px-3 py-2 bg-red-50 text-red-800 text-sm font-medium flex items-center justify-between gap-3">
-          <span>Bild-Upload fehlgeschlagen: {uploadError}</span>
+          <span>Image upload failed: {uploadError}</span>
           <button
             type="button"
             onClick={() => setUploadError(null)}
             className="shrink-0 underline cursor-pointer"
           >
-            Schließen
+            Close
           </button>
         </div>
       )}

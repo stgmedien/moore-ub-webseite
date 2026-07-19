@@ -190,10 +190,10 @@ export function TemplateEditor({
     startTransition(async () => {
       const r = await saveTemplateVersion(fd);
       if (r.ok) {
-        setMsg(`Version ${r.version} gespeichert.`);
+        setMsg(`Version ${r.version} saved.`);
         setChangeNote("");
       } else {
-        setErr(r.error ?? "Fehler beim Speichern");
+        setErr(r.error ?? "Saving failed");
       }
     });
   };
@@ -226,24 +226,24 @@ export function TemplateEditor({
             Editor
           </ViewBtn>
           <ViewBtn active={view === "diff"} onClick={() => setView("diff")}>
-            Diff zur Vorgänger-Version
+            Diff to previous version
           </ViewBtn>
         </div>
         <div className="flex items-center gap-2 text-xs">
-          <span className="text-[var(--color-wh-fg-muted)]">Vorschau:</span>
+          <span className="text-[var(--color-wh-fg-muted)]">Preview:</span>
           <ViewBtn
             small
             active={previewMode === "with-vars"}
             onClick={() => setPreviewMode("with-vars")}
           >
-            Mit Beispielwerten
+            With sample values
           </ViewBtn>
           <ViewBtn
             small
             active={previewMode === "raw"}
             onClick={() => setPreviewMode("raw")}
           >
-            Roh
+            Raw
           </ViewBtn>
         </div>
       </div>
@@ -254,10 +254,10 @@ export function TemplateEditor({
           <aside className="bg-white border border-[var(--color-wh-winter-grey)] rounded-2xl p-4 space-y-5 lg:sticky lg:top-4 self-start max-h-[calc(100vh-2rem)] overflow-y-auto">
             <div>
               <p className="text-[10px] uppercase tracking-wider text-[var(--color-wh-fg-muted)] font-semibold mb-2">
-                Variablen
+                Variables
               </p>
               <div className="space-y-3">
-                {(["Kunde", "Buchung", "Zahlung", "Sonstiges"] as const).map((group) => {
+                {(["Customer", "Booking", "Payment", "Other"] as const).map((group) => {
                   const inGroup = variables.filter((v) => v.group === group);
                   if (inGroup.length === 0) return null;
                   return (
@@ -274,7 +274,7 @@ export function TemplateEditor({
                             onDragStart={onVarDragStart(v.name)}
                             onDragEnd={onVarDragEnd}
                             onClick={() => insertAtCursor(`{{${v.name}}}`)}
-                            title={`${v.description}\nBeispiel: ${v.example}\n\nKlicken zum Einfügen oder ins Feld ziehen`}
+                            title={`${v.description}\nExample: ${v.example}\n\nClick to insert or drag into a field`}
                             className={`text-[11px] font-mono px-1.5 py-0.5 rounded-md border transition cursor-grab active:cursor-grabbing select-none ${
                               draggedVar === v.name
                                 ? "bg-[var(--color-wh-deep-green)] text-white border-[var(--color-wh-deep-green)] scale-95"
@@ -307,18 +307,18 @@ export function TemplateEditor({
                   hint="⌘K"
                   onClick={() => wrapSelection("[", "](https://...)")}
                 />
-                <ToolBtn label="• Liste" onClick={() => insertLinePrefix("- ")} />
-                <ToolBtn label="Zitat" onClick={() => insertLinePrefix("> ")} />
+                <ToolBtn label="• List" onClick={() => insertLinePrefix("- ")} />
+                <ToolBtn label="Quote" onClick={() => insertLinePrefix("> ")} />
               </div>
             </div>
 
             <div className="text-[10px] text-[var(--color-wh-fg-muted)] pt-3 border-t border-[var(--color-wh-winter-grey)]/40">
               <p className="m-0 mb-1">
-                <strong>Drag &amp; Drop:</strong> Variablen-Pille ins Subject- oder Body-Feld
+                <strong>Drag &amp; drop:</strong> drag a variable pill into the subject or body field.
                 ziehen.
               </p>
               <p className="m-0">
-                <strong>Klick:</strong> fügt an Cursor-Position ein.
+                <strong>Click:</strong> inserts at the cursor position.
               </p>
             </div>
           </aside>
@@ -360,13 +360,13 @@ export function TemplateEditor({
             </div>
             <div>
               <label className="block text-[10px] uppercase tracking-wider text-[var(--color-wh-fg-muted)] font-semibold mb-1">
-                Änderungs-Notiz (optional)
+                Change note (optional)
               </label>
               <input
                 type="text"
                 value={changeNote}
                 onChange={(e) => setChangeNote(e.target.value)}
-                placeholder="Was hast Du geändert?"
+                placeholder="What did you change?"
                 className="w-full rounded-lg border border-[var(--color-wh-winter-grey)] px-3 py-2 text-sm"
               />
             </div>
@@ -377,7 +377,7 @@ export function TemplateEditor({
                   checked={setActive}
                   onChange={(e) => setSetActive(e.target.checked)}
                 />
-                Direkt aktivieren
+                Activate immediately
               </label>
               <button
                 type="submit"
@@ -385,10 +385,10 @@ export function TemplateEditor({
                 className="ml-auto rounded-full bg-[var(--color-wh-deep-green)] text-white px-5 py-2.5 text-sm font-semibold disabled:opacity-50"
               >
                 {pending
-                  ? "Speichere …"
+                  ? "Saving…"
                   : dirty
-                    ? "Neue Version speichern"
-                    : "Keine Änderungen"}
+                    ? "Save new version"
+                    : "No changes"}
               </button>
             </div>
             {msg && (
@@ -404,7 +404,7 @@ export function TemplateEditor({
           {/* === RIGHT: Live-Preview === */}
           <aside className="bg-[var(--color-wh-snow)] border border-[var(--color-wh-winter-grey)] rounded-2xl p-4 lg:sticky lg:top-4 self-start">
             <p className="text-[10px] uppercase tracking-wider text-[var(--color-wh-fg-muted)] font-semibold mb-2">
-              Live-Vorschau
+              Live preview
             </p>
             <div className="bg-white border border-[var(--color-wh-winter-grey)]/40 rounded-lg overflow-hidden mb-3">
               <div className="px-4 py-2 bg-[var(--color-wh-beige)] border-b border-[var(--color-wh-winter-grey)]/60 text-xs">
@@ -412,13 +412,13 @@ export function TemplateEditor({
                 <p className="m-0 font-semibold text-[var(--color-wh-black)] truncate">
                   {renderedSubject || (
                     <span className="italic text-[var(--color-wh-fg-muted)]">
-                      (Subject leer)
+                      (subject empty)
                     </span>
                   )}
                 </p>
               </div>
               <iframe
-                title="Mail-Vorschau"
+                title="Mail preview"
                 srcDoc={renderedBodyHtml}
                 className="w-full bg-white"
                 style={{ height: "min(640px, calc(100vh - 280px))" }}
@@ -426,21 +426,21 @@ export function TemplateEditor({
             </div>
             <p className="text-[10px] text-[var(--color-wh-fg-muted)] m-0">
               {previewMode === "with-vars"
-                ? `Vorschau mit Beispielwerten (${SAMPLE_VALUES.firstName}, ${SAMPLE_VALUES.bookingNumber}, …)`
-                : "Variablen werden als Pills hervorgehoben."}{" "}
-              Tatsächlicher Versand verwendet echte Buchungsdaten.
+                ? `Preview with sample values (${SAMPLE_VALUES.firstName}, ${SAMPLE_VALUES.bookingNumber}, …)`
+                : "Variables are highlighted as pills."}{" "}
+              Actual sending uses real data.
             </p>
           </aside>
         </div>
       ) : (
         <div className="bg-white border border-[var(--color-wh-winter-grey)] rounded-2xl p-5">
           <p className="text-[10px] uppercase tracking-wider text-[var(--color-wh-fg-muted)] font-semibold mb-2">
-            Diff: vorherige Version → aktuelle Bearbeitung
+            Diff: previous version → current edit
           </p>
           <div className="text-sm font-mono whitespace-pre-wrap rounded-lg border border-[var(--color-wh-winter-grey)] p-4 bg-[var(--color-wh-snow)] max-h-[640px] overflow-auto">
             {diffParts.length === 0 ? (
               <p className="text-[var(--color-wh-fg-muted)] italic m-0">
-                Kein Diff verfügbar.
+                No diff available.
               </p>
             ) : (
               diffParts.map((part, i) => {

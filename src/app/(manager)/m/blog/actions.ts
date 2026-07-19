@@ -39,11 +39,11 @@ const computeReadingMinutes = (html: string): number => {
 
 export async function createBlogPost(): Promise<void> {
   const session = await requireManager();
-  const slug = await ensureUniqueSlug(toSlug(`entwurf-${new Date().toISOString().slice(0, 10)}`));
+  const slug = await ensureUniqueSlug(toSlug(`draft-${new Date().toISOString().slice(0, 10)}`));
   const inserted = await db
     .insert(blogPosts)
     .values({
-      title: "Neuer Entwurf",
+      title: "New draft",
       slug,
       contentHtml: "",
       authorId: (session.user as { id?: string } | undefined)?.id ?? null,
@@ -53,7 +53,7 @@ export async function createBlogPost(): Promise<void> {
 
   await db.insert(activityLog).values({
     who: session.user?.name ?? session.user?.email ?? "Manager",
-    what: `Blog-Entwurf angelegt (${slug})`,
+    what: `Blog draft created (${slug})`,
   });
 
   redirect(`/m/blog/${inserted[0].id}`);
@@ -68,7 +68,7 @@ export async function saveBlogPost(raw: z.infer<typeof upsertSchema>): Promise<S
     return { ok: false, error: parsed.error.issues.map((i) => i.message).join(", ") };
   }
   const data = parsed.data;
-  if (!data.id) return { ok: false, error: "Post-ID fehlt." };
+  if (!data.id) return { ok: false, error: "Post ID missing." };
 
   const cleanHtml = sanitizeAndRestrict(data.contentHtml ?? "");
   const cleanHtmlEn = data.contentHtmlEn?.trim()
@@ -113,8 +113,8 @@ export async function publishBlogPost(id: string): Promise<{ ok: boolean; error?
   const session = await requireManager();
   const found = await db.select().from(blogPosts).where(eq(blogPosts.id, id)).limit(1);
   const post = found[0];
-  if (!post) return { ok: false, error: "Beitrag nicht gefunden" };
-  if (!post.title || !post.contentHtml) return { ok: false, error: "Titel und Inhalt sind Pflicht." };
+  if (!post) return { ok: false, error: "Post not found" };
+  if (!post.title || !post.contentHtml) return { ok: false, error: "Title and content are required." };
 
   await db
     .update(blogPosts)
@@ -127,7 +127,7 @@ export async function publishBlogPost(id: string): Promise<{ ok: boolean; error?
 
   await db.insert(activityLog).values({
     who: session.user?.name ?? session.user?.email ?? "Manager",
-    what: `Blog-Beitrag veröffentlicht: ${post.title} (/${post.slug})`,
+    what: `Blog post published: ${post.title} (/${post.slug})`,
   });
 
   revalidatePath("/m/blog");
@@ -156,7 +156,7 @@ export async function deleteBlogPost(id: string): Promise<void> {
   if (found[0]) {
     await db.insert(activityLog).values({
       who: session.user?.name ?? session.user?.email ?? "Manager",
-      what: `Blog-Beitrag gelöscht: ${found[0].title}`,
+      what: `Blog post deleted: ${found[0].title}`,
     });
   }
   revalidatePath("/m/blog");

@@ -57,7 +57,7 @@ export function ManagerShell({
         <button
           type="button"
           onClick={() => setOpen(true)}
-          aria-label="Menü öffnen"
+          aria-label="Open menu"
           aria-expanded={open}
           className="p-2.5 -ml-1 rounded-md hover:bg-[var(--color-wh-snow)]/10 active:bg-[var(--color-wh-snow)]/15 transition-colors"
         >
@@ -100,7 +100,7 @@ export function ManagerShell({
         <button
           type="button"
           onClick={() => setOpen(false)}
-          aria-label="Menü schließen"
+          aria-label="Close menu"
           className="absolute top-4 right-3 z-10 p-1.5 rounded-md text-[var(--color-wh-snow)]/80 hover:text-[var(--color-wh-snow)] hover:bg-[var(--color-wh-snow)]/10 transition-colors"
         >
           <X size={20} />
