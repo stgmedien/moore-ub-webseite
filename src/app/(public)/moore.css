@@ -1626,7 +1626,7 @@ a.contact-detail-value:hover {
 
 .news-ticker-track {
   display: inline-flex;
-  animation: moore-ticker 50s linear infinite;
+  animation: moore-ticker 75s linear infinite;
   will-change: transform;
 }
 
