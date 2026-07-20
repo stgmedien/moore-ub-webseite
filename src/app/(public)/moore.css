@@ -360,6 +360,22 @@
   justify-content: flex-end;
 }
 
+/* Auf Tablet/Desktop bekommt der Hero eine feste Mindesthöhe, damit der
+   Bildausschnitt und das Glass-Overlay NICHT von der Länge der Überschrift
+   abhängen. Norwegisch (2 Zeilen) bleibt oben verankert unverändert; die
+   Mindesthöhe füllt den Rest als unsichtbaren Puffer nach unten. Englisch
+   (bis zu 4 Zeilen) passt durch das reduzierte padding-bottom in dieselbe
+   Höhe. So sieht der Hero in beiden Sprachen identisch aus.
+   660px = worst-case EN-Copy (~460px bei max. Breite) + 120px oben + 80px unten. */
+@media (min-width: 761px) {
+  .hero-inner {
+    min-height: 660px;
+    box-sizing: border-box;
+    align-items: flex-start;
+    padding-bottom: 80px;
+  }
+}
+
 .hero-copy {
   max-width: 640px;
   width: 100%;
