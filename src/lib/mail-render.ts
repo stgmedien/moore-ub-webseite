@@ -150,12 +150,12 @@ export const wrapEmailHtml = (inner: string, subject?: string): string => `<!DOC
 <body style="background:#F7F7F2;padding:32px 0;margin:0;font-family:Inter,system-ui,sans-serif;">
   <div style="max-width:600px;margin:0 auto;background:#fff;padding:32px;border-radius:20px;box-shadow:0 4px 14px rgba(17,17,17,0.05);">
     <p style="font-family:Inter,sans-serif;font-size:11px;color:#2F4A35;letter-spacing:0.16em;text-transform:uppercase;margin:0 0 12px;font-weight:600;">
-      Wiesenhütte
+      Moore UB
     </p>
     ${inner}
     <hr style="border:0;border-top:1px solid #C8CEC4;margin:28px 0 12px;"/>
     <p style="font-family:Inter,sans-serif;font-size:11px;color:#5b5b56;margin:0;">
-      Skifreunde Gütersloh e.V. · hello@wiesenhütte.com · www.wiesenhütte.com
+      Moore UB · post@mooreub.no · www.mooreub.no
     </p>
   </div>
 </body>

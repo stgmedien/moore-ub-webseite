@@ -14,16 +14,16 @@ type IcalBookingArgs = {
 };
 
 export function buildIcalInvite(args: IcalBookingArgs): MailAttachment {
-  const uid = `booking-${args.bookingId}@wiesenhuette.de`;
+  const uid = `booking-${args.bookingId}@mooreub.no`;
   const dtstart = toIcalDate(args.arrival);
   const dtend = toIcalDate(args.departure);
-  const summary = `Wiesenhütte – ${args.guestName} (${args.persons} Personen)`;
+  const summary = `Moore UB – ${args.guestName} (${args.persons} Personen)`;
   const now = new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z";
 
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Skifreunde Gütersloh e.V.//Wiesenhütte//DE",
+    "PRODID:-//Moore UB//mooreub.no//DE",
     "METHOD:REQUEST",
     "BEGIN:VEVENT",
     `UID:${uid}`,
@@ -46,16 +46,16 @@ export function buildIcalInvite(args: IcalBookingArgs): MailAttachment {
 }
 
 export function buildIcalCancel(args: IcalBookingArgs): MailAttachment {
-  const uid = `booking-${args.bookingId}@wiesenhuette.de`;
+  const uid = `booking-${args.bookingId}@mooreub.no`;
   const dtstart = toIcalDate(args.arrival);
   const dtend = toIcalDate(args.departure);
-  const summary = `STORNIERT – Wiesenhütte – ${args.guestName}`;
+  const summary = `STORNIERT – Moore UB – ${args.guestName}`;
   const now = new Date().toISOString().replace(/[-:]/g, "").slice(0, 15) + "Z";
 
   const ics = [
     "BEGIN:VCALENDAR",
     "VERSION:2.0",
-    "PRODID:-//Skifreunde Gütersloh e.V.//Wiesenhütte//DE",
+    "PRODID:-//Moore UB//mooreub.no//DE",
     "METHOD:CANCEL",
     "BEGIN:VEVENT",
     `UID:${uid}`,

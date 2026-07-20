@@ -64,7 +64,7 @@ export const sendMail = async (args: SendMailArgs): Promise<void> => {
   const html = await render(args.react);
   const text = await render(args.react, { plainText: true });
 
-  const from = process.env.MAIL_FROM ?? "Wiesenhütte <noreply@wiesenhuette.de>";
+  const from = process.env.MAIL_FROM ?? "Moore UB <post@mooreub.no>";
 
   // Optionales Versand-Archiv: Wenn MAIL_BCC_ARCHIVE gesetzt ist (z. B. ein
   // Vereins-Postfach), bekommt es jede ausgehende Mail als Blindkopie — so
