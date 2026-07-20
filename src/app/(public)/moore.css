@@ -1032,6 +1032,9 @@
 
 .team-card .portrait img {
   object-fit: cover;
+  /* 4:5-Crop der 2:3-Porträts: oberen Bildteil bevorzugen, damit die
+     Köpfe Luft nach oben behalten statt an den Rand gequetscht zu werden */
+  object-position: 50% 20%;
 }
 
 .team-card .meta {
