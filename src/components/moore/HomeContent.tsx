@@ -57,11 +57,19 @@ function CrossSectionSmall() {
   );
 }
 
-export type LatestPost = { title: string; slug: string };
+export type LatestPost = { title: string; titleEn: string | null; slug: string };
 
 export default function HomeContent({ latestPost = null }: { latestPost?: LatestPost | null }) {
   const { lang } = useLang();
   const no = lang === "no";
+
+  // Ticker zeigt den Titel in der aktiven Sprache; ohne englische Übersetzung
+  // fällt er auf den norwegischen Titel zurück.
+  const tickerTitle = latestPost
+    ? no
+      ? latestPost.title
+      : latestPost.titleEn || latestPost.title
+    : "";
 
   return (
     <>
@@ -69,7 +77,7 @@ export default function HomeContent({ latestPost = null }: { latestPost?: Latest
         <Link
           href={`/blog/${latestPost.slug}`}
           className="news-ticker"
-          aria-label={`${no ? "Aktuelt" : "News"}: ${latestPost.title}`}
+          aria-label={`${no ? "Aktuelt" : "News"}: ${tickerTitle}`}
         >
           <span className="news-ticker-track">
             {[0, 1].map((half) => (
@@ -77,7 +85,7 @@ export default function HomeContent({ latestPost = null }: { latestPost?: Latest
                 {Array.from({ length: 6 }).map((_, i) => (
                   <span key={i} className="news-ticker-item">
                     <span className="news-ticker-label">{no ? "AKTUELT" : "NEWS"}</span>
-                    {latestPost.title}
+                    {tickerTitle}
                     <span className="news-ticker-more">{no ? "LES MER →" : "READ MORE →"}</span>
                   </span>
                 ))}
