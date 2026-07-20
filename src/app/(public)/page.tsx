@@ -11,7 +11,7 @@ export default async function Home() {
   let latestPost: LatestPost | null = null;
   try {
     const rows = await db
-      .select({ title: blogPosts.title, slug: blogPosts.slug })
+      .select({ title: blogPosts.title, titleEn: blogPosts.titleEn, slug: blogPosts.slug })
       .from(blogPosts)
       .where(eq(blogPosts.status, "published"))
       .orderBy(desc(blogPosts.publishedAt))
