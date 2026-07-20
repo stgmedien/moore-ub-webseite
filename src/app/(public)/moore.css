@@ -1501,6 +1501,15 @@ a.contact-detail-value:hover {
   margin: 28px 0;
 }
 
+/* Embeds (LinkedIn/YouTube/Vimeo) kommen mit fester width aus dem
+   Editor-HTML — auf schmalen Schirmen auf Containerbreite begrenzen,
+   damit nichts rechts abgeschnitten wird. */
+.moore-article iframe {
+  max-width: 100%;
+  border: 0;
+  margin: 28px 0;
+}
+
 .moore-article ul,
 .moore-article ol {
   margin: 0 0 18px;
@@ -1617,7 +1626,7 @@ a.contact-detail-value:hover {
 
 .news-ticker-track {
   display: inline-flex;
-  animation: moore-ticker 35s linear infinite;
+  animation: moore-ticker 50s linear infinite;
   will-change: transform;
 }
 
