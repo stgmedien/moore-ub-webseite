@@ -26,9 +26,13 @@ export default function OmOssContent({ news = [] }: { news?: NewsItem[] }) {
             {no ? "OM OSS" : "ABOUT US"}
           </div>
           <h1 style={{ maxWidth: 880, fontSize: "clamp(36px,4.6vw,60px)", lineHeight: 1.05 }}>
-            {no
-              ? "Fem elever. Ett mål: slutt på sløsing med tau."
-              : "Five students. One goal: an end to rope waste."}
+            {no ? (
+              <>Mindre sløsing. Mer sporbarhet.</>
+            ) : (
+              <>
+                Less waste. <span className="hl-red">MOORE</span> traceability.
+              </>
+            )}
           </h1>
           <p className="lede" style={{ maxWidth: 620 }}>
             {no
@@ -45,8 +49,10 @@ export default function OmOssContent({ news = [] }: { news?: NewsItem[] }) {
               <div className="fact-value">Thora Storm VGS</div>
             </div>
             <div className="fact">
-              <div className="fact-key">TEAM</div>
-              <div className="fact-value">{no ? "5 elever" : "5 students"}</div>
+              <div className="fact-key">{no ? "PRIS" : "AWARD"}</div>
+              <div className="fact-value">
+                {no ? "Europamestere 2026" : "European champions 2026"}
+              </div>
             </div>
             <div className="fact">
               <div className="fact-key">ORG.NR.</div>

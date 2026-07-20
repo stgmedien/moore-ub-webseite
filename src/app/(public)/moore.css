@@ -396,7 +396,7 @@
   text-shadow: 0 1px 14px rgba(0, 0, 0, 0.35);
 }
 
-.hero-copy h1 .hl-red {
+.hl-red {
   box-shadow: inset 0 -6px 0 var(--red);
 }
 
