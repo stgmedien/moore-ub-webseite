@@ -46,7 +46,7 @@ export default function SiteNav() {
           aria-label={no ? "Meny" : "Menu"}
           onClick={() => setOpen((v) => !v)}
         >
-          {open ? "LUKK ✕" : "MENY ☰"}
+          {open ? (no ? "LUKK ✕" : "CLOSE ✕") : no ? "MENY ☰" : "MENU ☰"}
         </button>
       </div>
       {/* Clicking a link bubbles here and closes the menu before navigation. */}

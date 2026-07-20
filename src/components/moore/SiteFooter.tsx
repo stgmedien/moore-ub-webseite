@@ -34,13 +34,21 @@ export default function SiteFooter() {
             <span className="plain">
               Suhms gate 6
               <br />
-              Trondheim, Norge
+              {no ? "Trondheim, Norge" : "Trondheim, Norway"}
             </span>
           </div>
           <div className="footer-col">
             <span className="head">{no ? "FØLG OSS" : "FOLLOW US"}</span>
-            <a href="#">Instagram</a>
-            <a href="#">LinkedIn</a>
+            <a href="https://www.instagram.com/moore.ub/" target="_blank" rel="noopener noreferrer">
+              Instagram
+            </a>
+            <a
+              href="https://www.linkedin.com/company/moore-ub"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
           </div>
         </div>
         <div className="footer-bottom">
@@ -49,11 +57,7 @@ export default function SiteFooter() {
             <Link href="/personvern">{no ? "Personvern" : "Privacy"}</Link>
             <Link href="/impressum">{no ? "Juridisk informasjon" : "Legal notice"}</Link>
           </span>
-          <span>
-            {no
-              ? "UNGDOMSBEDRIFT — THORA STORM VGS, TRONDHEIM"
-              : "STUDENT COMPANY — THORA STORM VGS, TRONDHEIM"}
-          </span>
+          <span>Thora Storm vgs</span>
         </div>
       </div>
     </footer>

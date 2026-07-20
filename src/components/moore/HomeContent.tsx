@@ -107,11 +107,6 @@ export default function HomeContent({ latestPost = null }: { latestPost?: Latest
         />
         <div className="moore-container hero-inner">
           <div className="hero-copy">
-            <div className="eyebrow">
-              {no
-                ? "SPORBARE FORTØYNINGSTROSSER — TRONDHEIM, NORGE"
-                : "TRACEABLE MOORING LINES — TRONDHEIM, NORWAY"}
-            </div>
             <h1>
               {no ? (
                 <>
