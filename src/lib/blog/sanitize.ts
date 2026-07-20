@@ -17,6 +17,8 @@ const ALLOWED_IFRAME_HOSTS = [
   "youtube-nocookie.com",
   "www.youtube-nocookie.com",
   "player.vimeo.com",
+  "linkedin.com",
+  "www.linkedin.com",
 ];
 
 const DANGEROUS_TAG_BLOCKS = [
@@ -58,7 +60,11 @@ const restrictIframes = (html: string): string =>
     if (!srcMatch) return "";
     try {
       const url = new URL(srcMatch[1]);
-      const ok = ALLOWED_IFRAME_HOSTS.some((h) => url.hostname.endsWith(h));
+      // Dot-Boundary statt blankem endsWith, sonst würde z. B.
+      // "notlinkedin.com" als "linkedin.com" durchgehen.
+      const ok = ALLOWED_IFRAME_HOSTS.some(
+        (h) => url.hostname === h || url.hostname.endsWith("." + h)
+      );
       if (!ok) return "";
       // Preserve original tag (with attributes); browser will close it normally.
       return full;
