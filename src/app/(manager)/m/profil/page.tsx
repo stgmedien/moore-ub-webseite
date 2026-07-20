@@ -6,7 +6,7 @@ import { eq } from "drizzle-orm";
 import ProfileClient from "./ProfileClient";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Mein Profil · Moore UB Manager" };
+export const metadata = { title: "My profile · Moore UB Manager" };
 
 type Props = {
   searchParams: Promise<{ forced?: string; force_2fa?: string }>;
@@ -26,24 +26,24 @@ export default async function ProfilePage({ searchParams }: Props) {
 
   return (
     <div className="px-4 sm:px-8 py-8 sm:py-10 max-w-[840px]">
-      <div className="eyebrow">Profil</div>
-      <h1 className="text-[40px] mt-2 mb-1">Mein Konto</h1>
+      <div className="eyebrow">Profile</div>
+      <h1 className="text-[40px] mt-2 mb-1">My account</h1>
       <p className="text-[var(--color-wh-fg-muted)] m-0 mt-2">
-        Hier verwaltest Du Deinen Namen, Dein Passwort, Deine E-Mail-Adresse und die
-        Zwei-Faktor-Authentifizierung.
+        Manage your name, password, e-mail address and
+        two-factor authentication here.
       </p>
 
       {need2FA && (force_2fa === "1" || me.mustEnable2FA) && (
         <div className="mt-6 rounded-2xl bg-amber-50 border-l-4 border-amber-500 p-5">
           <p className="text-xs uppercase tracking-wider font-bold text-amber-800 mb-1">
-            ⚠ Zwei-Faktor-Authentifizierung erforderlich
+            ⚠ Two-factor authentication required
           </p>
           <p className="text-sm text-amber-900 m-0">
-            Aus Sicherheitsgründen müssen alle Manager-Konten mit erweiterten Rechten
-            Zwei-Faktor-Authentifizierung (2FA) eingerichtet haben. Scroll zur 2FA-Sektion
-            unten und scanne den QR-Code mit einer Authenticator-App (Google Authenticator,
-            Authy, 1Password, Bitwarden …). Erst danach kannst Du andere Bereiche im
-            Manager-Backend wieder erreichen.
+            For security reasons, all manager accounts with elevated rights must have
+            two-factor authentication (2FA) set up. Scroll to the 2FA section
+            below and scan the QR code with an authenticator app (Google Authenticator,
+            Authy, 1Password, Bitwarden …). Only then can you access the other areas of the
+            manager backend again.
           </p>
         </div>
       )}

@@ -32,9 +32,9 @@ export default async function BlogListPage() {
       <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
           <div className="eyebrow">Blog</div>
-          <h1 className="text-[40px] mt-2 mb-0">Beiträge</h1>
+          <h1 className="text-[40px] mt-2 mb-0">Posts</h1>
           <p className="text-[var(--color-wh-fg-muted)] m-0 mt-2">
-            {published.length} veröffentlicht · {drafts.length} Entwürfe · {archived.length} archiviert
+            {published.length} published · {drafts.length} drafts · {archived.length} archived
           </p>
         </div>
         <div className="flex gap-2">
@@ -45,19 +45,19 @@ export default async function BlogListPage() {
 
       <div className="mt-10 space-y-12">
         {drafts.length > 0 && (
-          <Section title="Entwürfe">
+          <Section title="Drafts">
             <PostsTable rows={drafts} />
           </Section>
         )}
-        <Section title="Veröffentlicht">
+        <Section title="Published">
           {published.length === 0 ? (
-            <Empty text="Noch keine veröffentlichten Beiträge." />
+            <Empty text="No published posts yet." />
           ) : (
             <PostsTable rows={published} />
           )}
         </Section>
         {archived.length > 0 && (
-          <Section title="Archiviert">
+          <Section title="Archived">
             <PostsTable rows={archived} />
           </Section>
         )}
@@ -95,12 +95,12 @@ const PostsTable = ({ rows }: { rows: Row[] }) => (
     <table className="w-full text-sm">
       <thead className="bg-[var(--color-wh-snow)] border-b border-[var(--color-wh-winter-grey)] text-left">
         <tr>
-          <Th>Titel</Th>
+          <Th>Title</Th>
           <Th>Slug</Th>
-          <Th>Autor</Th>
+          <Th>Author</Th>
           <Th>Status</Th>
-          <Th>Lesezeit</Th>
-          <Th>Aktualisiert</Th>
+          <Th>Reading time</Th>
+          <Th>Updated</Th>
         </tr>
       </thead>
       <tbody>
@@ -114,7 +114,7 @@ const PostsTable = ({ rows }: { rows: Row[] }) => (
                 href={`/m/blog/${r.id}`}
                 className="font-semibold text-[var(--color-wh-deep-green)] no-underline"
               >
-                {r.title || "(kein Titel)"}
+                {r.title || "(untitled)"}
               </Link>
             </Td>
             <Td>
@@ -135,8 +135,8 @@ const PostsTable = ({ rows }: { rows: Row[] }) => (
                 {r.status}
               </span>
             </Td>
-            <Td>{r.readingMinutes} Min.</Td>
-            <Td>{new Date(r.updatedAt).toLocaleDateString("de-DE")}</Td>
+            <Td>{r.readingMinutes} min</Td>
+            <Td>{new Date(r.updatedAt).toLocaleDateString("en-GB")}</Td>
           </tr>
         ))}
       </tbody>

@@ -46,7 +46,7 @@ export default async function TemplateEditorPage({ params }: Props) {
         href="/m/mail-templates"
         className="text-sm text-[var(--color-wh-fg-muted)] no-underline"
       >
-        ← Zurück zur Liste
+        ← Back to list
       </Link>
       <div className="flex items-start justify-between gap-4 mt-3 mb-6">
         <div>
@@ -70,9 +70,9 @@ export default async function TemplateEditorPage({ params }: Props) {
 
       {/* Versions-Verlauf */}
       <section className="bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-6 mt-8">
-        <h2 className="text-[20px] m-0 mb-4">Versionen ({versions.length})</h2>
+        <h2 className="text-[20px] m-0 mb-4">Versions ({versions.length})</h2>
         {versions.length === 0 ? (
-          <p className="text-sm text-[var(--color-wh-fg-muted)]">Noch keine Versionen.</p>
+          <p className="text-sm text-[var(--color-wh-fg-muted)]">No versions yet.</p>
         ) : (
           <ul className="divide-y divide-[var(--color-wh-winter-grey)]/40">
             {versions.map((v) => (
@@ -85,13 +85,13 @@ export default async function TemplateEditorPage({ params }: Props) {
                     <span className="font-mono text-xs">v{v.version}</span>
                     {v.id === tpl.activeVersionId && (
                       <span className="text-[10px] text-emerald-700 uppercase tracking-wider font-semibold">
-                        ● aktiv
+                        ● active
                       </span>
                     )}
                   </div>
                   <p className="text-sm m-0 truncate">{v.subject}</p>
                   <p className="text-[10px] text-[var(--color-wh-fg-muted)] m-0">
-                    {v.createdBy ?? "—"} · {new Date(v.createdAt).toLocaleString("de-DE")}
+                    {v.createdBy ?? "—"} · {new Date(v.createdAt).toLocaleString("en-GB")}
                     {v.changeNote && ` · ${v.changeNote}`}
                   </p>
                 </div>
@@ -108,7 +108,7 @@ export default async function TemplateEditorPage({ params }: Props) {
                       type="submit"
                       className="text-xs text-[var(--color-wh-deep-green)] underline"
                     >
-                      Als aktiv setzen
+                      Set as active
                     </button>
                   </form>
                 )}
@@ -121,12 +121,12 @@ export default async function TemplateEditorPage({ params }: Props) {
       {/* Aktive Version Vorschau */}
       {activeVersion && (
         <section className="bg-white border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-6 mt-8">
-          <h2 className="text-[20px] m-0 mb-4">Vorschau (aktive Version)</h2>
+          <h2 className="text-[20px] m-0 mb-4">Preview (active version)</h2>
           <p className="text-xs text-[var(--color-wh-fg-muted)] mb-2">Subject</p>
           <p className="font-semibold mb-4 p-3 bg-[var(--color-wh-beige)] rounded-lg">
             {activeVersion.subject}
           </p>
-          <p className="text-xs text-[var(--color-wh-fg-muted)] mb-2">Body (gerendert)</p>
+          <p className="text-xs text-[var(--color-wh-fg-muted)] mb-2">Body (rendered)</p>
           <div
             className="border border-[var(--color-wh-winter-grey)] rounded-lg p-4 bg-[var(--color-wh-snow)]"
             dangerouslySetInnerHTML={{ __html: mdToHtml(activeVersion.bodyMd) }}

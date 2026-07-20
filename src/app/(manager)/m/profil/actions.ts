@@ -42,10 +42,10 @@ export async function updateMyName(name: string): Promise<{ ok: boolean; error?:
   const me = await requireSelf();
   const trimmed = name.trim();
   if (trimmed.length < 1 || trimmed.length > 255)
-    return { ok: false, error: "Name muss 1–255 Zeichen haben." };
+    return { ok: false, error: "Name must be 1–255 characters." };
 
   await db.update(users).set({ name: trimmed, updatedAt: new Date() }).where(eq(users.id, me.id));
-  await db.insert(activityLog).values({ who: me.email, what: `Name geändert: ${me.name} → ${trimmed}` });
+  await db.insert(activityLog).values({ who: me.email, what: `Name changed: ${me.name} → ${trimmed}` });
 
   revalidatePath("/m/profil");
   return { ok: true };
@@ -59,10 +59,10 @@ const pwSchema = z.object({
   current: z.string().min(1),
   next: z
     .string()
-    .min(10, "Mindestens 10 Zeichen.")
+    .min(10, "At least 10 characters.")
     .max(128)
-    .regex(/[A-Za-z]/, "Mindestens ein Buchstabe.")
-    .regex(/[0-9]/, "Mindestens eine Ziffer."),
+    .regex(/[A-Za-z]/, "At least one letter.")
+    .regex(/[0-9]/, "At least one digit."),
 });
 
 export async function changeMyPassword(
@@ -70,12 +70,12 @@ export async function changeMyPassword(
 ): Promise<{ ok: boolean; error?: string }> {
   const me = await requireSelf();
   const parsed = pwSchema.safeParse(raw);
-  if (!parsed.success) return { ok: false, error: "Neues Passwort: mind. 8 Zeichen." };
+  if (!parsed.success) return { ok: false, error: "New password: at least 8 characters." };
 
   const found = await db.select().from(users).where(eq(users.id, me.id)).limit(1);
-  if (!found[0]?.passwordHash) return { ok: false, error: "Account hat keinen Passwort-Hash." };
+  if (!found[0]?.passwordHash) return { ok: false, error: "Account has no password hash." };
   const ok = await bcrypt.compare(parsed.data.current, found[0].passwordHash);
-  if (!ok) return { ok: false, error: "Aktuelles Passwort stimmt nicht." };
+  if (!ok) return { ok: false, error: "Current password is incorrect." };
 
   const newHash = await bcrypt.hash(parsed.data.next, 12);
   await db
@@ -83,7 +83,7 @@ export async function changeMyPassword(
     .set({ passwordHash: newHash, mustChangePassword: false, updatedAt: new Date() })
     .where(eq(users.id, me.id));
 
-  await db.insert(activityLog).values({ who: me.email, what: `Eigenes Passwort geändert` });
+  await db.insert(activityLog).values({ who: me.email, what: `Own password changed` });
   revalidatePath("/m/profil");
   return { ok: true };
 }
@@ -102,21 +102,21 @@ export async function requestEmailChange(
 ): Promise<{ ok: boolean; error?: string }> {
   const me = await requireSelf();
   const parsed = emailChangeSchema.safeParse(raw);
-  if (!parsed.success) return { ok: false, error: "Ungültige E-Mail oder Passwort fehlt." };
+  if (!parsed.success) return { ok: false, error: "Invalid e-mail or password missing." };
 
   const newEmail = parsed.data.newEmail.toLowerCase().trim();
   if (newEmail === me.email.toLowerCase())
-    return { ok: false, error: "Neue Adresse ist identisch mit der bisherigen." };
+    return { ok: false, error: "New address is identical to the current one." };
 
   // Re-auth via password
   const found = await db.select().from(users).where(eq(users.id, me.id)).limit(1);
-  if (!found[0]?.passwordHash) return { ok: false, error: "Account-Fehler." };
+  if (!found[0]?.passwordHash) return { ok: false, error: "Account error." };
   const ok = await bcrypt.compare(parsed.data.password, found[0].passwordHash);
-  if (!ok) return { ok: false, error: "Aktuelles Passwort stimmt nicht." };
+  if (!ok) return { ok: false, error: "Current password is incorrect." };
 
   // Doppelung verhindern: ist die neue Mail schon vergeben?
   const existingUser = await db.select({ id: users.id }).from(users).where(eq(users.email, newEmail)).limit(1);
-  if (existingUser[0]) return { ok: false, error: "Diese E-Mail ist bereits einem Account zugeordnet." };
+  if (existingUser[0]) return { ok: false, error: "This e-mail is already assigned to an account." };
 
   // Frühere offene Anfragen invalidieren
   await db
@@ -140,7 +140,7 @@ export async function requestEmailChange(
   try {
     await sendMail({
       to: newEmail,
-      subject: "Bitte E-Mail-Wechsel bestätigen",
+      subject: "Please confirm your e-mail change",
       template: "email-verification",
       react: EmailVerificationEmail({
         name: me.name,
@@ -152,12 +152,12 @@ export async function requestEmailChange(
     });
   } catch (err) {
     console.error("[profil/email-change] mail failed", err);
-    return { ok: false, error: "Verifizierungs-Mail konnte nicht versendet werden." };
+    return { ok: false, error: "Verification mail could not be sent." };
   }
 
   await db.insert(activityLog).values({
     who: me.email,
-    what: `E-Mail-Wechsel angefordert: ${me.email} → ${newEmail} (Verifizierung ausstehend)`,
+    what: `E-mail change requested: ${me.email} → ${newEmail} (verification pending)`,
   });
   revalidatePath("/m/profil");
   return { ok: true };
@@ -194,12 +194,12 @@ export async function confirmTwoFactorSetup(
 ): Promise<{ ok: boolean; backupCodes?: string[]; error?: string }> {
   const me = await requireSelf();
   const parsed = confirmSchema.safeParse(raw);
-  if (!parsed.success) return { ok: false, error: "Code ungültig." };
+  if (!parsed.success) return { ok: false, error: "Invalid code." };
 
   const found = await db.select().from(users).where(eq(users.id, me.id)).limit(1);
-  if (!found[0]?.twoFactorSecret) return { ok: false, error: "Kein 2FA-Setup-Versuch gestartet." };
+  if (!found[0]?.twoFactorSecret) return { ok: false, error: "No 2FA setup attempt started." };
   if (!verifyTotp(parsed.data.code, found[0].twoFactorSecret))
-    return { ok: false, error: "Code falsch oder abgelaufen — bitte den aktuellen Code erneut eingeben." };
+    return { ok: false, error: "Code wrong or expired — please enter the current code again." };
 
   const { plain, hashed } = await generateBackupCodes(10);
   await db
@@ -212,12 +212,12 @@ export async function confirmTwoFactorSetup(
     })
     .where(eq(users.id, me.id));
 
-  await db.insert(activityLog).values({ who: me.email, what: `2FA aktiviert` });
+  await db.insert(activityLog).values({ who: me.email, what: `2FA enabled` });
 
   try {
     await sendMail({
       to: me.email,
-      subject: "Zwei-Faktor-Authentifizierung aktiviert",
+      subject: "Two-factor authentication enabled",
       template: "2fa-enabled",
       react: TwoFactorEnabledEmail({ name: me.name, email: me.email }),
     });
@@ -236,16 +236,16 @@ export async function disableTwoFactor(
 ): Promise<{ ok: boolean; error?: string }> {
   const me = await requireSelf();
   const parsed = disableSchema.safeParse(raw);
-  if (!parsed.success) return { ok: false, error: "Ungültige Eingabe." };
+  if (!parsed.success) return { ok: false, error: "Invalid input." };
 
   const found = await db.select().from(users).where(eq(users.id, me.id)).limit(1);
   if (!found[0]?.passwordHash || !found[0]?.twoFactorSecret)
-    return { ok: false, error: "Account-Fehler." };
+    return { ok: false, error: "Account error." };
 
   const pwOk = await bcrypt.compare(parsed.data.password, found[0].passwordHash);
-  if (!pwOk) return { ok: false, error: "Passwort falsch." };
+  if (!pwOk) return { ok: false, error: "Wrong password." };
   if (!verifyTotp(parsed.data.code, found[0].twoFactorSecret))
-    return { ok: false, error: "2FA-Code falsch." };
+    return { ok: false, error: "Wrong 2FA code." };
 
   await db
     .update(users)
@@ -257,7 +257,7 @@ export async function disableTwoFactor(
     })
     .where(eq(users.id, me.id));
 
-  await db.insert(activityLog).values({ who: me.email, what: `2FA deaktiviert` });
+  await db.insert(activityLog).values({ who: me.email, what: `2FA disabled` });
   revalidatePath("/m/profil");
   return { ok: true };
 }
@@ -270,7 +270,7 @@ export async function verifyEmailChange(
   id: string,
   token: string
 ): Promise<{ ok: boolean; newEmail?: string; error?: string }> {
-  if (!id || !token) return { ok: false, error: "Token fehlt." };
+  if (!id || !token) return { ok: false, error: "Token missing." };
 
   const rows = await db
     .select()
@@ -278,10 +278,10 @@ export async function verifyEmailChange(
     .where(and(eq(emailChangeRequests.id, id), gt(emailChangeRequests.expiresAt, new Date()), isNull(emailChangeRequests.consumedAt)))
     .limit(1);
   const req = rows[0];
-  if (!req) return { ok: false, error: "Token ungültig oder abgelaufen. Bitte E-Mail-Wechsel erneut anfordern." };
+  if (!req) return { ok: false, error: "Token invalid or expired. Please request the e-mail change again." };
 
   const ok = await (await import("bcryptjs")).default.compare(token, req.tokenHash);
-  if (!ok) return { ok: false, error: "Token-Hash stimmt nicht — ungültiger Link." };
+  if (!ok) return { ok: false, error: "Token hash does not match — invalid link." };
 
   // Race-condition: prüfen ob neue Mail nicht zwischenzeitlich von jemand anderem belegt wurde
   const conflict = await db
@@ -289,7 +289,7 @@ export async function verifyEmailChange(
     .from(users)
     .where(eq(users.email, req.newEmail))
     .limit(1);
-  if (conflict[0]) return { ok: false, error: "Diese E-Mail wurde inzwischen vergeben." };
+  if (conflict[0]) return { ok: false, error: "This e-mail has since been taken." };
 
   // Apply
   const userRow = await db.select().from(users).where(eq(users.id, req.userId)).limit(1);
@@ -307,7 +307,7 @@ export async function verifyEmailChange(
 
   await db.insert(activityLog).values({
     who: req.newEmail,
-    what: `E-Mail-Wechsel bestätigt: ${oldEmail} → ${req.newEmail}`,
+    what: `E-mail change confirmed: ${oldEmail} → ${req.newEmail}`,
   });
 
   return { ok: true, newEmail: req.newEmail };

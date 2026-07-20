@@ -15,7 +15,7 @@ type Role = "customer" | "member" | "manager" | "admin";
 const requireAdmin = async () => {
   const session = await requireManager();
   const role = (session.user as { role?: string } | undefined)?.role;
-  if (role !== "admin") throw new Error("Forbidden — Admin-Rechte erforderlich");
+  if (role !== "admin") throw new Error("Forbidden — admin rights required");
   return session;
 };
 
@@ -43,10 +43,10 @@ const createSchema = z.object({
   role: z.enum(["manager", "admin"]),
   password: z
     .string()
-    .min(10, "Mindestens 10 Zeichen.")
+    .min(10, "At least 10 characters.")
     .max(128)
-    .regex(/[A-Za-z]/, "Mindestens ein Buchstabe.")
-    .regex(/[0-9]/, "Mindestens eine Ziffer."),
+    .regex(/[A-Za-z]/, "At least one letter.")
+    .regex(/[0-9]/, "At least one digit."),
   sendWelcomeMail: z.boolean().default(true),
 });
 
@@ -65,7 +65,7 @@ export async function createUser(raw: z.infer<typeof createSchema>): Promise<Cre
 
   const existing = await db.select({ id: users.id }).from(users).where(eq(users.email, email)).limit(1);
   if (existing[0]) {
-    return { ok: false, error: `Ein Nutzer mit der Mail ${email} existiert bereits.` };
+    return { ok: false, error: `A user with the e-mail ${email} already exists.` };
   }
 
   const passwordHash = await bcrypt.hash(data.password, 12);
@@ -84,7 +84,7 @@ export async function createUser(raw: z.infer<typeof createSchema>): Promise<Cre
 
   await db.insert(activityLog).values({
     who: adminName,
-    what: `Nutzer angelegt: ${email} (Rolle ${data.role})`,
+    what: `User created: ${email} (role ${data.role})`,
   });
 
   if (data.sendWelcomeMail) {
@@ -92,7 +92,7 @@ export async function createUser(raw: z.infer<typeof createSchema>): Promise<Cre
     try {
       await sendMail({
         to: email,
-        subject: "Dein Zugang zum Moore-UB-Manager-Backend",
+        subject: "Your access to the Moore UB manager backend",
         template: "user-welcome",
         react: UserWelcomeEmail({
           name: data.name,
@@ -107,7 +107,7 @@ export async function createUser(raw: z.infer<typeof createSchema>): Promise<Cre
       console.error("[users.create] welcome mail failed", err);
       await db.insert(activityLog).values({
         who: "System",
-        what: `Welcome-Mail an ${email} fehlgeschlagen — bitte Zugangsdaten anders weitergeben`,
+        what: `Welcome mail to ${email} failed — please share the credentials another way`,
       });
     }
   }
@@ -126,18 +126,18 @@ export async function updateUserRole(
 ): Promise<{ ok: boolean; error?: string }> {
   const session = await requireAdmin();
   const parsed = updateRoleSchema.safeParse(raw);
-  if (!parsed.success) return { ok: false, error: "Ungültige Eingabe." };
+  if (!parsed.success) return { ok: false, error: "Invalid input." };
   const { userId, role } = parsed.data;
   const meId = currentUserId(session);
 
   if (userId === meId) {
-    return { ok: false, error: "Du kannst Deine eigene Rolle nicht ändern." };
+    return { ok: false, error: "You cannot change your own role." };
   }
 
   // Last-admin guard: when DEMOTING someone (target is currently admin AND new role isn't admin),
   // refuse if they're the only admin left.
   const targetUser = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  if (!targetUser[0]) return { ok: false, error: "Nutzer nicht gefunden." };
+  if (!targetUser[0]) return { ok: false, error: "User not found." };
   if (targetUser[0].role === "admin" && role !== "admin") {
     const otherAdmins = await db
       .select({ id: users.id })
@@ -146,7 +146,7 @@ export async function updateUserRole(
     if (otherAdmins.length === 0) {
       return {
         ok: false,
-        error: "Letzter Admin kann nicht herabgestuft werden — leg vorher einen anderen Admin an.",
+        error: "The last admin cannot be demoted — create another admin first.",
       };
     }
   }
@@ -158,7 +158,7 @@ export async function updateUserRole(
 
   await db.insert(activityLog).values({
     who: session.user?.name ?? session.user?.email ?? "Admin",
-    what: `Rolle geändert: ${targetUser[0].email} → ${role} (vorher: ${targetUser[0].role})`,
+    what: `Role changed: ${targetUser[0].email} → ${role} (before: ${targetUser[0].role})`,
   });
 
   revalidatePath("/m/benutzer");
@@ -169,10 +169,10 @@ const resetPwSchema = z.object({
   userId: z.string().uuid(),
   newPassword: z
     .string()
-    .min(10, "Mindestens 10 Zeichen.")
+    .min(10, "At least 10 characters.")
     .max(128)
-    .regex(/[A-Za-z]/, "Mindestens ein Buchstabe.")
-    .regex(/[0-9]/, "Mindestens eine Ziffer."),
+    .regex(/[A-Za-z]/, "At least one letter.")
+    .regex(/[0-9]/, "At least one digit."),
   sendMail: z.boolean().default(false),
 });
 
@@ -185,11 +185,11 @@ export async function resetUserPassword(
 ): Promise<ResetPwResult> {
   const session = await requireAdmin();
   const parsed = resetPwSchema.safeParse(raw);
-  if (!parsed.success) return { ok: false, error: "Ungültige Eingabe." };
+  if (!parsed.success) return { ok: false, error: "Invalid input." };
   const { userId, newPassword, sendMail: shouldSendMail } = parsed.data;
 
   const target = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  if (!target[0]) return { ok: false, error: "Nutzer nicht gefunden." };
+  if (!target[0]) return { ok: false, error: "User not found." };
 
   const hash = await bcrypt.hash(newPassword, 12);
   await db
@@ -203,7 +203,7 @@ export async function resetUserPassword(
 
   await db.insert(activityLog).values({
     who: session.user?.name ?? session.user?.email ?? "Admin",
-    what: `Passwort zurückgesetzt für ${target[0].email}`,
+    what: `Password reset for ${target[0].email}`,
   });
 
   if (shouldSendMail && target[0].email) {
@@ -211,7 +211,7 @@ export async function resetUserPassword(
     try {
       await sendMail({
         to: target[0].email,
-        subject: "Dein neues Passwort für das Moore-UB-Backend",
+        subject: "Your new password for the Moore UB backend",
         template: "user-welcome",
         react: UserWelcomeEmail({
           name: target[0].name ?? target[0].email,
@@ -241,19 +241,19 @@ export async function updateUserEmail(
 ): Promise<{ ok: boolean; error?: string }> {
   const session = await requireAdmin();
   const parsed = updateEmailSchema.safeParse(raw);
-  if (!parsed.success) return { ok: false, error: "Ungültige E-Mail-Adresse." };
+  if (!parsed.success) return { ok: false, error: "Invalid e-mail address." };
   const { userId, email: newEmail } = parsed.data;
   const lower = newEmail.toLowerCase().trim();
 
   const target = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  if (!target[0]) return { ok: false, error: "Nutzer nicht gefunden." };
+  if (!target[0]) return { ok: false, error: "User not found." };
 
   const conflict = await db
     .select({ id: users.id })
     .from(users)
     .where(and(eq(users.email, lower), ne(users.id, userId)))
     .limit(1);
-  if (conflict[0]) return { ok: false, error: `Die Adresse ${lower} ist bereits vergeben.` };
+  if (conflict[0]) return { ok: false, error: `The address ${lower} is already taken.` };
 
   await db
     .update(users)
@@ -262,7 +262,7 @@ export async function updateUserEmail(
 
   await db.insert(activityLog).values({
     who: session.user?.name ?? session.user?.email ?? "Admin",
-    what: `E-Mail geändert: ${target[0].email} → ${lower}`,
+    what: `E-mail changed: ${target[0].email} → ${lower}`,
   });
 
   revalidatePath("/m/benutzer");
@@ -272,10 +272,10 @@ export async function updateUserEmail(
 export async function deleteUser(userId: string): Promise<{ ok: boolean; error?: string }> {
   const session = await requireAdmin();
   const meId = currentUserId(session);
-  if (userId === meId) return { ok: false, error: "Du kannst Dich nicht selbst löschen." };
+  if (userId === meId) return { ok: false, error: "You cannot delete yourself." };
 
   const target = await db.select().from(users).where(eq(users.id, userId)).limit(1);
-  if (!target[0]) return { ok: false, error: "Nutzer nicht gefunden." };
+  if (!target[0]) return { ok: false, error: "User not found." };
 
   if (target[0].role === "admin") {
     const otherAdmins = await db
@@ -285,7 +285,7 @@ export async function deleteUser(userId: string): Promise<{ ok: boolean; error?:
     if (otherAdmins.length === 0) {
       return {
         ok: false,
-        error: "Letzten Admin kann nicht gelöscht werden — leg vorher einen anderen Admin an.",
+        error: "The last admin cannot be deleted — create another admin first.",
       };
     }
   }
@@ -293,7 +293,7 @@ export async function deleteUser(userId: string): Promise<{ ok: boolean; error?:
   await db.delete(users).where(eq(users.id, userId));
   await db.insert(activityLog).values({
     who: session.user?.name ?? session.user?.email ?? "Admin",
-    what: `Nutzer gelöscht: ${target[0].email}`,
+    what: `User deleted: ${target[0].email}`,
   });
 
   revalidatePath("/m/benutzer");

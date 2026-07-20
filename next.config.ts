@@ -65,7 +65,9 @@ const nextConfig: NextConfig = {
               // @vercel/blob-SDK lädt über https://vercel.com/api/blob/ hoch,
               // die Blob-Hosts decken direkte Store-Zugriffe ab.
               "connect-src 'self' https://vercel.com/api/blob/ https://*.blob.vercel-storage.com https://*.public.blob.vercel-storage.com",
-              "frame-src 'self'",
+              // Blog-Embeds: muss mit ALLOWED_IFRAME_HOSTS in
+              // lib/blog/sanitize.ts deckungsgleich sein
+              "frame-src 'self' https://www.linkedin.com https://www.youtube.com https://www.youtube-nocookie.com https://player.vimeo.com",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",

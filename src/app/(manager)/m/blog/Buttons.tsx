@@ -16,7 +16,7 @@ export const NewPostButton = () => {
       className="inline-flex h-11 px-5 items-center gap-2 rounded-[var(--radius-btn)] bg-[var(--color-wh-deep-green)] text-[var(--color-wh-snow)] text-sm font-semibold cursor-pointer hover:bg-[var(--color-wh-deep-green-hover)] transition-colors disabled:opacity-60"
     >
       {pending ? <Loader2 size={16} className="animate-spin" /> : <Plus size={16} />}
-      Neuer Entwurf
+      New draft
     </button>
   );
 };
@@ -50,7 +50,7 @@ export const ImportButton = () => {
         className="inline-flex h-11 px-5 items-center gap-2 rounded-[var(--radius-btn)] border border-[var(--color-wh-deep-green)] text-[var(--color-wh-deep-green)] text-sm font-semibold cursor-pointer hover:bg-[var(--color-wh-green-soft)] transition-colors disabled:opacity-60"
       >
         {pending ? <Loader2 size={16} className="animate-spin" /> : <Upload size={16} />}
-        HTML importieren
+        Import HTML
       </button>
       <input
         ref={inputRef}

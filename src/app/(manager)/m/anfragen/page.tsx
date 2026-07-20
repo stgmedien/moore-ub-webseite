@@ -3,10 +3,10 @@ import { contactSubmissions } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Anfragen · Moore UB Manager" };
+export const metadata = { title: "Inquiries · Moore UB Manager" };
 
 function formatDateTime(d: Date) {
-  return new Intl.DateTimeFormat("de-DE", {
+  return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -24,15 +24,15 @@ export default async function AnfragenPage() {
 
   return (
     <div className="p-6 lg:p-10 max-w-4xl">
-      <h1 className="font-display text-3xl font-bold text-wh-black mb-1">Anfragen</h1>
+      <h1 className="font-display text-3xl font-bold text-wh-black mb-1">Inquiries</h1>
       <p className="text-wh-fg-muted mb-8">
-        Eingänge aus dem Kontakt-Formular der Website — Antworten gehen direkt per E-Mail an die
-        Absender:in (Reply-To ist gesetzt).
+        Messages from the website contact form — replies go directly to the sender by e-mail
+        (Reply-To is set).
       </p>
 
       <div className="flex flex-col gap-4">
         {submissions.length === 0 && (
-          <p className="text-sm text-wh-fg-muted">Noch keine Anfragen eingegangen.</p>
+          <p className="text-sm text-wh-fg-muted">No inquiries received yet.</p>
         )}
         {submissions.map((s) => (
           <article key={s.id} className="rounded-xl border border-black/10 bg-white p-5">

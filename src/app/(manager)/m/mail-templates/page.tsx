@@ -8,7 +8,7 @@ import { createTemplate } from "./actions";
 import { DeleteTemplateButton } from "./DeleteTemplateButton";
 
 export const dynamic = "force-dynamic";
-export const metadata = { title: "Mail-Templates · Moore UB Manager" };
+export const metadata = { title: "Mail templates · Moore UB Manager" };
 
 export default async function MailTemplatesPage() {
   const session = await auth();
@@ -19,12 +19,12 @@ export default async function MailTemplatesPage() {
 
   return (
     <div className="px-4 sm:px-8 py-8 sm:py-10 max-w-[1100px]">
-      <div className="eyebrow">Manager · Kommunikation</div>
-      <h1 className="text-[36px] mt-2 mb-1">Mail-Templates.</h1>
+      <div className="eyebrow">Manager · Communication</div>
+      <h1 className="text-[36px] mt-2 mb-1">Mail templates.</h1>
       <p className="text-[var(--color-wh-fg-muted)] m-0 mb-8">
-        Versionierte Vorlagen mit Markdown-Body und{" "}
-        <code className="text-xs">{`{{variable}}`}</code>-Substitution. Jede Änderung erzeugt eine
-        neue Version; alte Versionen bleiben für Audit + Rollback erhalten.
+        Versioned templates with a Markdown body and{" "}
+        <code className="text-xs">{`{{variable}}`}</code> substitution. Every change creates a
+        new version; old versions are kept for audit + rollback.
       </p>
 
       {/* Liste */}
@@ -48,7 +48,7 @@ export default async function MailTemplatesPage() {
             {all.length === 0 ? (
               <tr>
                 <td colSpan={4} className="px-4 py-6 text-[var(--color-wh-fg-muted)]">
-                  Noch keine Templates angelegt. Lege das erste unten an.
+                  No templates yet. Create the first one below.
                 </td>
               </tr>
             ) : (
@@ -61,9 +61,9 @@ export default async function MailTemplatesPage() {
                   <td className="px-4 py-3">{t.name}</td>
                   <td className="px-4 py-3">
                     {t.activeVersionId ? (
-                      <span className="text-emerald-700 text-xs">✓ aktiv</span>
+                      <span className="text-emerald-700 text-xs">✓ active</span>
                     ) : (
-                      <span className="text-amber-700 text-xs">noch keine aktive Version</span>
+                      <span className="text-amber-700 text-xs">no active version yet</span>
                     )}
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -72,7 +72,7 @@ export default async function MailTemplatesPage() {
                         href={`/m/mail-templates/${t.id}`}
                         className="text-[var(--color-wh-deep-green)] underline text-sm"
                       >
-                        Bearbeiten
+                        Edit
                       </Link>
                       <DeleteTemplateButton id={t.id} name={t.name} />
                     </div>
@@ -86,7 +86,7 @@ export default async function MailTemplatesPage() {
 
       {/* Neu anlegen */}
       <section className="bg-[var(--color-wh-beige)] border border-[var(--color-wh-winter-grey)] rounded-[var(--radius-card)] p-6">
-        <h2 className="text-[20px] m-0 mb-4">Neues Template anlegen</h2>
+        <h2 className="text-[20px] m-0 mb-4">Create new template</h2>
         <form
           action={async (fd) => {
             "use server";
@@ -103,36 +103,36 @@ export default async function MailTemplatesPage() {
               name="key"
               required
               pattern="[a-z0-9_-]+"
-              placeholder="z.B. booking-reminder-custom"
+              placeholder="e.g. booking-reminder-custom"
               className="w-full rounded-lg border border-[var(--color-wh-winter-grey)] px-3 py-2 text-sm font-mono"
             />
           </div>
           <div>
             <label className="block text-xs uppercase text-[var(--color-wh-fg-muted)] mb-1">
-              Anzeigename
+              Display name
             </label>
             <input
               type="text"
               name="name"
               required
-              placeholder="z.B. Persönliche Buchungs-Erinnerung"
+              placeholder="e.g. Personal booking reminder"
               className="w-full rounded-lg border border-[var(--color-wh-winter-grey)] px-3 py-2 text-sm"
             />
           </div>
           <div className="md:col-span-2">
             <label className="block text-xs uppercase text-[var(--color-wh-fg-muted)] mb-1">
-              Beschreibung (optional)
+              Description (optional)
             </label>
             <input
               type="text"
               name="description"
-              placeholder="Wann wird die Mail versendet?"
+              placeholder="When is this mail sent?"
               className="w-full rounded-lg border border-[var(--color-wh-winter-grey)] px-3 py-2 text-sm"
             />
           </div>
           <div className="md:col-span-2">
             <label className="block text-xs uppercase text-[var(--color-wh-fg-muted)] mb-1">
-              Verfügbare Variablen (komma-getrennt)
+              Available variables (comma-separated)
             </label>
             <input
               type="text"
@@ -146,7 +146,7 @@ export default async function MailTemplatesPage() {
               type="submit"
               className="rounded-full bg-[var(--color-wh-deep-green)] text-white px-5 py-2.5 text-sm font-semibold"
             >
-              Template anlegen
+              Create template
             </button>
           </div>
         </form>

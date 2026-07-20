@@ -29,15 +29,15 @@ export default function LoginForm() {
         const code = (res as { code?: string } | undefined)?.code;
         if (code === "totp_required") {
           setNeedsTotp(true);
-          setError("Dein Account hat 2FA aktiv — bitte den 6-stelligen Code aus Deiner Authenticator-App eingeben.");
+          setError("Your account has 2FA enabled — please enter the 6-digit code from your authenticator app.");
           return;
         }
         if (code === "totp_invalid") {
           setNeedsTotp(true);
-          setError("2FA-Code falsch oder abgelaufen. Bitte erneut eingeben (oder Backup-Code im Format XXXXX-XXXXX).");
+          setError("2FA code wrong or expired. Please try again (or use a backup code in the format XXXXX-XXXXX).");
           return;
         }
-        setError("Login fehlgeschlagen — E-Mail oder Passwort stimmen nicht.");
+        setError("Login failed — e-mail or password is incorrect.");
         return;
       }
       window.location.href = "/m/dashboard";
@@ -49,7 +49,7 @@ export default function LoginForm() {
       <Input
         id="email"
         type="email"
-        label="E-Mail"
+        label="E-mail"
         autoComplete="email"
         required
         value={email}
@@ -59,7 +59,7 @@ export default function LoginForm() {
       <Input
         id="password"
         type="password"
-        label="Passwort"
+        label="Password"
         autoComplete="current-password"
         required
         value={password}
@@ -70,19 +70,19 @@ export default function LoginForm() {
         <div className="bg-[var(--color-wh-green-soft)] border border-[var(--color-wh-green)]/30 rounded-[var(--radius-md)] p-4 space-y-3">
           <div className="flex items-center gap-2 text-[var(--color-wh-deep-green)] font-semibold">
             <ShieldCheck size={18} />
-            Zwei-Faktor-Authentifizierung
+            Two-factor authentication
           </div>
           <Input
             id="totp"
             type="text"
-            label="6-stelliger Code aus Authenticator-App"
+            label="6-digit code from your authenticator app"
             autoComplete="one-time-code"
             placeholder="123456"
             inputMode="numeric"
             required
             value={totp}
             onChange={(e) => setTotp(e.target.value)}
-            hint="Oder Backup-Code im Format XXXXX-XXXXX wenn Du Dein Phone nicht zur Hand hast"
+            hint="Or a backup code in the format XXXXX-XXXXX if you don't have your phone at hand"
             autoFocus
           />
         </div>
@@ -98,7 +98,7 @@ export default function LoginForm() {
         disabled={pending}
         iconRight={pending ? <Loader2 className="animate-spin" size={18} /> : null}
       >
-        {pending ? "Anmelden ..." : needsTotp ? "Code prüfen" : "Anmelden"}
+        {pending ? "Signing in..." : needsTotp ? "Verify code" : "Sign in"}
       </Button>
     </form>
   );

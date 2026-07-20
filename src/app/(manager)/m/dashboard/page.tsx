@@ -8,7 +8,7 @@ export const dynamic = "force-dynamic";
 export const metadata = { title: "Dashboard · Moore UB Manager" };
 
 function formatDateTime(d: Date) {
-  return new Intl.DateTimeFormat("de-DE", {
+  return new Intl.DateTimeFormat("en-GB", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
@@ -48,23 +48,23 @@ export default async function Dashboard() {
 
   const stats = [
     {
-      label: "Blogartikel (live)",
+      label: "Blog posts (live)",
       value: published,
-      sub: `${drafts} Entwürfe`,
+      sub: `${drafts} drafts`,
       href: "/m/blog",
       Icon: FileText,
     },
     {
-      label: "Kontakt-Anfragen",
+      label: "Contact inquiries",
       value: submissionCount[0]?.count ?? 0,
-      sub: "über das Formular",
+      sub: "via the contact form",
       href: "/m/anfragen",
       Icon: Inbox,
     },
     {
-      label: "Benutzer",
+      label: "Users",
       value: userCount[0]?.count ?? 0,
-      sub: "mit Backend-Zugang",
+      sub: "with backend access",
       href: "/m/benutzer",
       Icon: Users2,
     },
@@ -73,7 +73,7 @@ export default async function Dashboard() {
   return (
     <div className="p-6 lg:p-10 max-w-6xl">
       <h1 className="font-display text-3xl font-bold text-wh-black mb-1">Dashboard</h1>
-      <p className="text-wh-fg-muted mb-8">Willkommen im Moore-UB-Backend.</p>
+      <p className="text-wh-fg-muted mb-8">Welcome to the Moore UB backend.</p>
 
       <div className="grid gap-4 sm:grid-cols-3 mb-10">
         {stats.map((s) => (
@@ -94,17 +94,17 @@ export default async function Dashboard() {
       <div className="grid gap-8 lg:grid-cols-2">
         <section>
           <div className="flex items-center justify-between mb-3">
-            <h2 className="font-display text-lg font-bold text-wh-black">Neueste Anfragen</h2>
+            <h2 className="font-display text-lg font-bold text-wh-black">Latest inquiries</h2>
             <Link
               href="/m/anfragen"
               className="text-sm text-wh-fg-muted hover:text-wh-black no-underline flex items-center gap-1"
             >
-              Alle <ArrowRight size={14} />
+              All <ArrowRight size={14} />
             </Link>
           </div>
           <div className="rounded-xl border border-black/10 bg-white divide-y divide-black/5">
             {latestSubmissions.length === 0 && (
-              <p className="p-4 text-sm text-wh-fg-muted">Noch keine Anfragen.</p>
+              <p className="p-4 text-sm text-wh-fg-muted">No inquiries yet.</p>
             )}
             {latestSubmissions.map((s) => (
               <div key={s.id} className="p-4">
@@ -131,12 +131,12 @@ export default async function Dashboard() {
               href="/m/blog"
               className="text-sm text-wh-fg-muted hover:text-wh-black no-underline flex items-center gap-1"
             >
-              Verwalten <ArrowRight size={14} />
+              Manage <ArrowRight size={14} />
             </Link>
           </div>
           <div className="rounded-xl border border-black/10 bg-white divide-y divide-black/5">
             {latestPosts.length === 0 && (
-              <p className="p-4 text-sm text-wh-fg-muted">Noch keine Artikel.</p>
+              <p className="p-4 text-sm text-wh-fg-muted">No posts yet.</p>
             )}
             {latestPosts.map((p) => (
               <Link
@@ -158,7 +158,7 @@ export default async function Dashboard() {
                       : "bg-amber-100 text-amber-800")
                   }
                 >
-                  {p.status === "published" ? "Live" : "Entwurf"}
+                  {p.status === "published" ? "Live" : "Draft"}
                 </span>
               </Link>
             ))}
