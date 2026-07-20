@@ -302,9 +302,8 @@ export default function HomeContent({ latestPost = null }: { latestPost?: Latest
                 ) : (
                   <>
                     Just tell me what you&apos;re wondering about, and I&apos;ll get back to you
-                    myself — usually within a day. It only takes a minute, and you&apos;re not
-                    committing to anything. You can also reach me directly at{" "}
-                    <a href="mailto:post@mooreub.no">post@mooreub.no</a>.
+                    myself — usually within a day. It only takes a minute. You can also reach me
+                    directly at <a href="mailto:post@mooreub.no">post@mooreub.no</a>.
                   </>
                 )}
               </p>
