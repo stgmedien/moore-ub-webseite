@@ -41,10 +41,11 @@ function CrossSectionLarge() {
           />
         </g>
       ))}
-      {/* core with the embedded MOORE ID stripe (no pulsing target motif) */}
+      {/* core with the embedded MOORE ID stripe (no pulsing target motif) —
+          a small, deliberate marker rather than a bar filling the core */}
       <circle cx={cx} cy={cy} r={70} fill="#10181d" />
-      <rect x={cx - 4} y={cy - 42} width={8} height={84} rx={4} fill="#ED4F3E" />
-      <rect x={cx - 1.5} y={cy - 42} width={3} height={84} rx={1.5} fill="rgba(255,255,255,0.32)" />
+      <rect x={cx - 3} y={cy - 19} width={6} height={38} rx={3} fill="#ED4F3E" />
+      <rect x={cx - 1} y={cy - 19} width={2} height={38} rx={1} fill="rgba(255,255,255,0.3)" />
     </svg>
   );
 }
@@ -81,7 +82,7 @@ export default function ProduktContent() {
         ],
         [
           "Les dataene",
-          "Skanneren sender ID-en via Bluetooth til vår egenutviklede programvare, som viser spesifikasjoner, alder og historikk.",
+          "Skanneren sender ID-en trådløst til vår egenutviklede programvare, som viser spesifikasjoner, alder og historikk.",
         ],
       ]
     : [
@@ -95,7 +96,7 @@ export default function ProduktContent() {
         ],
         [
           "Read the data",
-          "The scanner sends the ID via Bluetooth to our purpose-built software, showing specifications, age and history.",
+          "The scanner sends the ID wirelessly to our purpose-built software, showing specifications, age and history.",
         ],
       ];
 
