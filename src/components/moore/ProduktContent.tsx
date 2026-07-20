@@ -5,53 +5,47 @@ import { Fragment } from "react";
 import { useLang } from "@/lib/moore-i18n";
 
 function CrossSectionLarge() {
+  const cx = 280;
+  const cy = 310;
+  const ring = 120; // radius the strand centers sit on
+  const lay = 10; // slight off-axis rotation so it doesn't read as a perfect grid
+  // 8 laid strands, packed and twisted tangentially (the "lay" of the rope) —
+  // deliberately not perfect circles, so it reads as a real cross-section
+  // rather than a generated diagram. Static: no idle motion.
+  const strands = Array.from({ length: 8 }, (_, i) => {
+    const deg = i * 45 + lay;
+    const rad = (deg * Math.PI) / 180;
+    return {
+      x: cx + ring * Math.cos(rad),
+      y: cy + ring * Math.sin(rad),
+      rot: deg + 90, // major axis tangential to the ring
+    };
+  });
   return (
     <svg viewBox="0 0 560 640">
-      <circle cx="280" cy="310" r="192" fill="none" stroke="#10181d" strokeWidth="2" />
-      <circle cx="280" cy="310" r="176" fill="none" stroke="rgba(16,24,29,0.3)" strokeWidth="1" />
-      <g
-        style={{
-          animation: "mo-rotate 120s linear infinite",
-          transformBox: "fill-box",
-          transformOrigin: "center",
-        }}
-      >
-        {[
-          [402, 310],
-          [366.3, 396.3],
-          [280, 432],
-          [193.7, 396.3],
-          [158, 310],
-          [193.7, 223.7],
-          [280, 188],
-          [366.3, 223.7],
-        ].map(([cx, cy]) => (
-          <circle
-            key={`${cx}-${cy}`}
-            cx={cx}
-            cy={cy}
-            r="48"
-            fill="#f4f4f1"
-            stroke="#10181d"
-            strokeWidth="1.5"
+      {/* outer jacket wall */}
+      <circle cx={cx} cy={cy} r={182} fill="none" stroke="#10181d" strokeWidth="2" />
+      <circle cx={cx} cy={cy} r={170} fill="none" stroke="rgba(16,24,29,0.28)" strokeWidth="1" />
+      {strands.map(({ x, y, rot }, i) => (
+        <g key={i} transform={`rotate(${rot} ${x} ${y})`}>
+          <ellipse cx={x} cy={y} rx={48} ry={42} fill="#f4f4f1" stroke="#10181d" strokeWidth="1.5" />
+          {/* inner yarn bundle hint */}
+          <ellipse
+            cx={x}
+            cy={y}
+            rx={32}
+            ry={27}
+            fill="none"
+            stroke="rgba(16,24,29,0.16)"
+            strokeWidth="1"
           />
-        ))}
-      </g>
-      <circle cx="280" cy="310" r="56" fill="#10181d" />
-      <circle
-        cx="280"
-        cy="310"
-        r="56"
-        fill="none"
-        stroke="#ED4F3E"
-        strokeWidth="1.5"
-        style={{
-          animation: "mo-pulse 2.6s ease-out infinite",
-          transformBox: "fill-box",
-          transformOrigin: "center",
-        }}
-      />
-      <rect x="276" y="266" width="8" height="88" fill="#ED4F3E" />
+        </g>
+      ))}
+      {/* core with the embedded MOORE ID stripe (no pulsing target motif) —
+          a small, deliberate marker rather than a bar filling the core */}
+      <circle cx={cx} cy={cy} r={70} fill="#10181d" />
+      <rect x={cx - 3} y={cy - 19} width={6} height={38} rx={3} fill="#ED4F3E" />
+      <rect x={cx - 1} y={cy - 19} width={2} height={38} rx={1} fill="rgba(255,255,255,0.3)" />
     </svg>
   );
 }
@@ -88,7 +82,7 @@ export default function ProduktContent() {
         ],
         [
           "Les dataene",
-          "Skanneren sender ID-en via Bluetooth til vår egenutviklede programvare, som viser spesifikasjoner, alder og historikk.",
+          "Skanneren sender ID-en trådløst til vår egenutviklede programvare, som viser spesifikasjoner, alder og historikk.",
         ],
       ]
     : [
@@ -102,7 +96,7 @@ export default function ProduktContent() {
         ],
         [
           "Read the data",
-          "The scanner sends the ID via Bluetooth to our purpose-built software, showing specifications, age and history.",
+          "The scanner sends the ID wirelessly to our purpose-built software, showing specifications, age and history.",
         ],
       ];
 
@@ -164,54 +158,19 @@ export default function ProduktContent() {
             <div className="xsec-box">
               <CrossSectionLarge />
               <div
-                className="xsec-label"
-                style={{ top: "3.44%", left: 0, right: 0, textAlign: "center" }}
-              >
-                {no ? "YTTERKAPPE" : "OUTER JACKET"}
-              </div>
-              <div
-                className="xsec-line"
-                style={{ left: "calc(50% - 0.5px)", top: "6.56%", width: 1, height: "11.56%" }}
-              />
-              <div
-                className="xsec-label"
-                style={{
-                  top: "44.69%",
-                  right: "1.43%",
-                  textAlign: "right",
-                  transform: "translateY(-14px)",
-                }}
-              >
-                {no ? "KORDEL — 1 AV 8" : "STRAND — 1 OF 8"}
-              </div>
-              <div
-                className="xsec-line"
-                style={{ top: "48.36%", left: "81.43%", right: "1.43%", height: 1 }}
-              />
-              <div
                 className="xsec-label red"
                 style={{ top: "44.69%", left: "1.43%", transform: "translateY(-14px)" }}
               >
-                MOORE ID-STRIPE
+                {no ? "MOORE ID-stripe" : "MOORE ID stripe"}
               </div>
               <div
                 className="xsec-line red"
                 style={{ top: "48.36%", left: "1.43%", width: "43.57%", height: 1 }}
               />
-              <div
-                className="xsec-line"
-                style={{ left: "calc(50% - 0.5px)", top: "58.13%", width: 1, height: "23.13%" }}
-              />
-              <div
-                className="xsec-label"
-                style={{ top: "82.81%", left: 0, right: 0, textAlign: "center" }}
-              >
-                {no ? "KJERNE" : "CORE"}
-              </div>
               <div className="xsec-footnote">
                 {no
-                  ? "TVERRSNITT — 8-SLÅTT TROSSE MED MOORE ID"
-                  : "CROSS-SECTION — 8-STRAND LINE WITH MOORE ID"}
+                  ? "Tverrsnitt — 8-slått trosse med MOORE ID"
+                  : "Cross-section — 8-strand line with MOORE ID"}
               </div>
             </div>
             <div className="xsec-copy">
@@ -227,7 +186,7 @@ export default function ProduktContent() {
               </p>
               <div className="datasheet">
                 <div className="datasheet-head">
-                  <span>{no ? "DATABLAD — MOORE ID" : "DATA SHEET — MOORE ID"}</span>
+                  <span>{no ? "MOORE ID — KORT FORTALT" : "MOORE ID — AT A GLANCE"}</span>
                 </div>
                 <div className="datasheet-body">
                   {datasheet.map(([key, value]) => (
