@@ -171,16 +171,55 @@
 
 /* ---------- site nav ---------- */
 
+/* Basiszustand: flache Leiste über die volle Breite. Zentrierte
+   width-Logik (statt left/right-Pinning), damit der Übergang zur
+   schwebenden Karte (.scrolled) sauber animieren kann. */
 .site-header {
   position: fixed;
   top: 0;
-  left: 0;
-  right: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
   z-index: 50;
   background: rgba(244, 244, 241, 0.94);
-  border-bottom: 1px solid var(--ink);
+  border: 1px solid transparent;
+  border-bottom-color: var(--ink);
+  border-radius: 0;
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
+  transition:
+    top 0.45s cubic-bezier(0.32, 0.72, 0.28, 1),
+    width 0.45s cubic-bezier(0.32, 0.72, 0.28, 1),
+    border-radius 0.45s cubic-bezier(0.32, 0.72, 0.28, 1),
+    border-color 0.45s ease,
+    background-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+/* Gescrollt: vom Rand gelöste, schwebende Glaskarte — voller Ink-Rahmen,
+   dezente Rundung (bewusst keine Pille, passt zur kantigen Designsprache),
+   weicher Schatten, etwas transparenter für den Glas-Effekt. */
+/* Industrielles, schwebendes Panel: scharfe Ecken + voller Ink-Rahmen wie
+   die anderen umrahmten Module (Facts-Grid, Datenblatt), flach ohne
+   Schatten. Der Backdrop-Blur macht es zum Milchglas-Frost; die
+   Transparenz bleibt moderat, damit es als solides Panel liest. */
+.site-header.scrolled {
+  top: 12px;
+  width: min(100% - 24px, 1240px);
+  border-color: var(--ink);
+  border-radius: 0;
+  background: rgba(244, 244, 241, 0.68);
+  box-shadow: none;
+}
+
+.site-header.scrolled .nav-inner {
+  height: 52px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header {
+    transition: none;
+  }
 }
 
 .nav-spacer {
@@ -192,6 +231,7 @@
   display: flex;
   align-items: center;
   gap: 28px;
+  transition: height 0.45s cubic-bezier(0.32, 0.72, 0.28, 1);
 }
 
 .brand {

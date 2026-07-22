@@ -1,13 +1,30 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLang } from "@/lib/moore-i18n";
 
 export default function SiteNav() {
   const { lang, setLang } = useLang();
   const no = lang === "no";
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Beim Scrollen löst sich die Leiste vom Rand und wird zur schwebenden
+  // Glaskarte (s. .site-header.scrolled in moore.css).
+  useEffect(() => {
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => setScrolled(window.scrollY > 24));
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+    };
+  }, []);
 
   const links = (
     <>
@@ -30,7 +47,15 @@ export default function SiteNav() {
   );
 
   return (
-    <header className="site-header">
+    <header
+      className={`site-header${scrolled ? " scrolled" : ""}`}
+      /* backdrop-filter inline: die Tailwind/LightningCSS-Pipeline wirft die
+         Stylesheet-Deklaration teils weg, Inline-Styles überleben (s. hero-blur) */
+      style={{
+        backdropFilter: "blur(16px) saturate(1.25)",
+        WebkitBackdropFilter: "blur(16px) saturate(1.25)",
+      }}
+    >
       <div className="moore-container nav-inner">
         <Link href="/" className="brand" aria-label="Moore UB">
           {/* eslint-disable-next-line @next/next/no-img-element -- small inline SVG logo */}
