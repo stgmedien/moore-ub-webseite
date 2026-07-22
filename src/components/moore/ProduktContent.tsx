@@ -108,7 +108,7 @@ export default function ProduktContent() {
         ],
         [
           "Fiskeri & akvakultur",
-          "Identifiser og følg opp tauverk i anlegg og på fartøy — mindre tap, mindre marin forsøpling.",
+          "Identifiser og følg opp tauverk i anlegg og på fartøy, noe som gir mindre tap av utstyr og mindre plast i havet.",
         ],
         [
           "Industri & inspeksjon",
@@ -122,7 +122,7 @@ export default function ProduktContent() {
         ],
         [
           "Fisheries & aquaculture",
-          "Identify and follow up rope in farms and on vessels — less loss, less marine litter.",
+          "Identify and follow up rope in farms and on vessels, which means less lost gear and less plastic in the sea.",
         ],
         [
           "Industry & inspection",
@@ -176,12 +176,12 @@ export default function ProduktContent() {
             <div className="xsec-copy">
               <h2>
                 {no
-                  ? "Beskyttet i kjernen. Lesbar utenfra."
-                  : "Protected in the core. Readable from outside."}
+                  ? "Beskyttet i kjernen, lesbar gjennom kappen."
+                  : "Protected in the core, readable through the jacket."}
               </h2>
               <p>
                 {no
-                  ? "Stripen ligger der trossen er best beskyttet — i kjernen. Den tåler saltvann, UV og slitasje like lenge som trossen selv, og krever ingen endring i hvordan trossen håndteres om bord."
+                  ? "Stripen ligger der trossen er best beskyttet — i kjernen. Den tåler saltvann, UV og slitasje gjennom hele trossens levetid, og krever ingen endring i hvordan trossen håndteres om bord."
                   : "The stripe sits where the rope is best protected — in the core. It withstands salt water, UV and wear for the life of the rope, and requires no change in how the line is handled on board."}
               </p>
               <div className="datasheet">

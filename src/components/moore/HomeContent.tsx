@@ -222,16 +222,16 @@ export default function HomeContent({ latestPost = null }: { latestPost?: Latest
                   <div className="feature-title">{no ? "Effektivitet" : "Efficiency"}</div>
                   <p>
                     {no
-                      ? "Identifiser trossen på sekunder — uten merkelapper eller gjetting."
-                      : "Identify the line in seconds — no tags, no guesswork."}
+                      ? "Identifiser hvilken som helst trosse på sekunder. Ingen merkelapper, ingen gjetting."
+                      : "Identify any line in seconds. No tags, no guesswork."}
                   </p>
                 </div>
                 <div className="feature">
                   <div className="feature-title">{no ? "Robusthet" : "Robustness"}</div>
                   <p>
                     {no
-                      ? "Stripen ligger beskyttet i kjernen — like lenge som trossen selv."
-                      : "The stripe sits protected in the core — for the life of the rope."}
+                      ? "Stripen ligger beskyttet i kjernen og fungerer gjennom hele trossens levetid."
+                      : "The stripe sits protected in the core and lasts for the life of the rope."}
                   </p>
                 </div>
                 <div className="feature">
@@ -248,8 +248,8 @@ export default function HomeContent({ latestPost = null }: { latestPost?: Latest
                   <div className="feature-title">{no ? "Kompatibilitet" : "Compatibility"}</div>
                   <p>
                     {no
-                      ? "Integreres i standard trosser — uendret håndtering om bord."
-                      : "Integrates into standard lines — unchanged handling on board."}
+                      ? "Den bygges inn i standard trosser, og håndteringen om bord er akkurat som før."
+                      : "It's built into standard lines, and handling on board stays exactly the same."}
                   </p>
                 </div>
               </div>
