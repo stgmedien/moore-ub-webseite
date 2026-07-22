@@ -1005,6 +1005,14 @@
   line-height: 1.3;
 }
 
+/* Awards-Variante des Facts-Grids: Preisname bekommt etwas mehr Präsenz,
+   Kontext-Label (Wettbewerb · Ort) bleibt die kleine Mono-Zeile darüber. */
+.facts-grid.awards .fact-value {
+  margin-top: 6px;
+  font-size: 15.5px;
+  font-weight: 600;
+}
+
 @media (max-width: 880px) {
   .fact {
     border-right: none;

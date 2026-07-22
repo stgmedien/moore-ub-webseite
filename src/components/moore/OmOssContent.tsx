@@ -39,24 +39,25 @@ export default function OmOssContent({ news = [] }: { news?: NewsItem[] }) {
               ? "Moore UB er en ungdomsbedrift ved Thora Storm videregående skole i Trondheim. Vi vil gjøre den maritime industrien mer bærekraftig ved å gi tau en digital identitet — og redusere overforbruket som skyldes manglende sporbarhet."
               : "Moore UB is a student company at Thora Storm upper secondary school in Trondheim. We want to make the maritime industry more sustainable by giving rope a digital identity — reducing the overconsumption caused by missing traceability."}
           </p>
-          <div className="facts-grid">
+          <div className="kicker" style={{ color: "#ED4F3E", marginTop: 48 }}>
+            {no ? "UTMERKELSER 2026" : "AWARDS 2026"}
+          </div>
+          <div className="facts-grid awards" style={{ marginTop: 20 }}>
             <div className="fact">
-              <div className="fact-key">{no ? "LOKASJON" : "LOCATION"}</div>
-              <div className="fact-value">Trondheim, NO</div>
+              <div className="fact-key">GEN-E 2026 · RIGA</div>
+              <div className="fact-value">JA Europe Innovation of the Year</div>
             </div>
             <div className="fact">
-              <div className="fact-key">{no ? "SKOLE" : "SCHOOL"}</div>
-              <div className="fact-value">Thora Storm VGS</div>
+              <div className="fact-key">GEN-E 2026 · RIGA</div>
+              <div className="fact-value">FedEx Access Award</div>
             </div>
             <div className="fact">
-              <div className="fact-key">{no ? "PRIS" : "AWARD"}</div>
-              <div className="fact-value">
-                {no ? "Europamestere 2026" : "European champions 2026"}
+              <div className="fact-key">
+                {no ? "NM 2026 · NORGE" : "NATIONAL FINAL 2026 · NORWAY"}
               </div>
-            </div>
-            <div className="fact">
-              <div className="fact-key">ORG.NR.</div>
-              <div className="fact-value">837 007 232</div>
+              <div className="fact-value">
+                {no ? "Norges beste ungdomsbedrift" : "Norway's best student company"}
+              </div>
             </div>
           </div>
         </div>
