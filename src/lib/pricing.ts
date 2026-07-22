@@ -1,9 +1,9 @@
 // =============================================================
-// Wiesenhütte Pricing Engine
+// Moore UB Pricing Engine
 // Stand: 01.07.2024 (gültig ab 01.01.2025)
 // Alle Preise in Cents (Integer) für GoBD/Buchhaltung.
 //
-// Hinweis: Kurtaxe wird seit Mai 2026 NICHT mehr über die Wiesenhütte
+// Hinweis: Kurtaxe wird seit Mai 2026 NICHT mehr über uns
 // abgerechnet. Der Bucher erhält nach Buchung eine separate E-Mail mit
 // einem Link zum offiziellen Kurtaxen-Portal Hochsauerland.
 // Endreinigung ist Pflicht.

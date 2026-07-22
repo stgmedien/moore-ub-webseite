@@ -79,17 +79,17 @@ export default function UserWelcomeEmail({
   return (
     <Html>
       <Head />
-      <Preview>Dein Zugang zum Wiesenhütten-Backend</Preview>
+      <Preview>Dein Zugang zum Manager-Backend</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Text style={eyebrow}>Wiesenhütte · Skifreunde Gütersloh</Text>
+          <Text style={eyebrow}>Moore UB</Text>
           <Heading style={heading}>Willkommen im Manager-Backend.</Heading>
 
           <Text style={text}>Hallo {name},</Text>
           <Text style={text}>
-            {invitedBy} hat Dich gerade als <strong>{roleLabel}</strong> für die Wiesenhütten-
-            Verwaltung angelegt. Du kannst Dich ab sofort einloggen und Buchungen, Kalender,
-            Sperrzeiten und (als Admin) auch andere Nutzer verwalten.
+            {invitedBy} hat Dich gerade als <strong>{roleLabel}</strong> für das Manager-Backend
+            angelegt. Du kannst Dich ab sofort einloggen und Inhalte, Anfragen und (als Admin)
+            auch andere Nutzer verwalten.
           </Text>
 
           <Section style={credBox}>

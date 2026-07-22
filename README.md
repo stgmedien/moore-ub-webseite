@@ -41,4 +41,4 @@ Auto-Deploy via GitHub-Integration. Benötigte Environment-Variablen:
 
 ---
 
-Basis: CMS-Export der Wiesenhütten-Plattform, umgebaut für Moore UB (Juli 2026).
+Basis: übernommenes CMS-Grundgerüst, umgebaut für Moore UB (Juli 2026).
