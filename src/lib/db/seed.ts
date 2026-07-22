@@ -1,11 +1,11 @@
 /**
- * Seed for the Wiesenhütte demo / dev environment.
+ * Seed for the Moore UB demo / dev environment.
  *
  *   npm run db:seed
  *
  * Creates:
  *   - 1 manager user (jonathan@stg-medien.com) with the IONOS password as initial pass
- *   - 1 admin user (admin@wiesenhuette.de — change after first login)
+ *   - 1 admin user (admin@mooreub.no — change after first login)
  *   - A handful of demo bookings spanning past, present, future + one Sperrzeit
  *
  * Idempotent: re-runs upsert by email/booking number.
@@ -150,7 +150,7 @@ async function main() {
   console.log("Seeding ...");
 
   await upsertUser(MANAGER_EMAIL, "Jonathan (STG Medien)", "admin", MANAGER_PASS);
-  await upsertUser("admin@wiesenhuette.de", "Vorstand", "admin", "ChangeMeNow!");
+  await upsertUser("admin@mooreub.no", "Vorstand", "admin", "ChangeMeNow!");
 
   // Demo customers
   const c1 = await upsertCustomer({
@@ -160,11 +160,11 @@ async function main() {
     type: "mitglied",
   });
   const c2 = await upsertCustomer({
-    email: "sekretariat@esg-guetersloh.de",
-    firstName: "ESG",
-    lastName: "Gütersloh",
+    email: "post@demoskole.no",
+    firstName: "Demo",
+    lastName: "Skole",
     type: "verein",
-    company: "ESG — Jgst. 11",
+    company: "Demo Skole — trinn 11",
   });
   const c3 = await upsertCustomer({
     email: "thorsten.wiegmann@gmail.com",

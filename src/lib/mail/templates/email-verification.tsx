@@ -75,7 +75,7 @@ export default function EmailVerificationEmail({
       <Preview>Bestätige Deine neue E-Mail-Adresse</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Text style={eyebrow}>Wiesenhütte · Manager-Backend</Text>
+          <Text style={eyebrow}>Moore UB · Manager-Backend</Text>
           <Heading style={heading}>Bestätige Deine neue E-Mail-Adresse</Heading>
 
           <Text style={text}>Hallo {name},</Text>

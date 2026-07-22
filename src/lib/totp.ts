@@ -13,7 +13,7 @@ export const generateTotpSecret = (): string => generateSecret({ length: 20 });
 export const buildOtpAuthUri = (
   secret: string,
   email: string,
-  issuer = "Wiesenhütte"
+  issuer = "Moore UB"
 ): string =>
   generateURI({
     secret,

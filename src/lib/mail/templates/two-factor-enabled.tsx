@@ -55,7 +55,7 @@ export default function TwoFactorEnabledEmail({ name, email }: Props) {
       <Preview>Zwei-Faktor-Authentifizierung aktiviert</Preview>
       <Body style={main}>
         <Container style={container}>
-          <Text style={eyebrow}>Wiesenhütte · Sicherheit</Text>
+          <Text style={eyebrow}>Moore UB · Sicherheit</Text>
           <Heading style={heading}>Zwei-Faktor-Authentifizierung aktiviert.</Heading>
           <Text style={text}>Hallo {name},</Text>
           <Text style={text}>

@@ -35,7 +35,7 @@ export const GLOBAL_MAIL_VARIABLES: MailVariable[] = [
   { name: "nights", description: "Nights", example: "3", group: "Booking" },
   { name: "persons", description: "Number of persons", example: "12", group: "Booking" },
   { name: "purpose", description: "Occasion", example: "Klassenfahrt", group: "Booking" },
-  { name: "bookingUrl", description: "Link to the booking in the account", example: "https://www.wiesenhütte.com/konto/buchungen/abc", group: "Booking" },
+  { name: "bookingUrl", description: "Link to the booking in the account", example: "https://www.mooreub.no/konto/buchungen/abc", group: "Booking" },
 
   // Zahlung
   { name: "totalAmount", description: "Total amount (formatted)", example: "1.420,00 €", group: "Payment" },
@@ -46,7 +46,7 @@ export const GLOBAL_MAIL_VARIABLES: MailVariable[] = [
 
   // Sonstiges
   { name: "today", description: "Today's date", example: new Date().toLocaleDateString("en-GB"), group: "Other" },
-  { name: "baseUrl", description: "Web address", example: "https://www.wiesenhütte.com", group: "Other" },
+  { name: "baseUrl", description: "Web address", example: "https://www.mooreub.no", group: "Other" },
 ];
 
 export const SAMPLE_VARIABLE_VALUES: Record<string, string> = Object.fromEntries(

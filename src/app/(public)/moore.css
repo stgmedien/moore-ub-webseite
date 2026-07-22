@@ -23,7 +23,7 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* Re-neutralize the Wiesenhütte base-layer heading styles (green color,
+/* Re-neutralize the inherited base-layer heading styles (green color,
    1rem bottom margin) — Moore components set their own values. */
 .moore h1,
 .moore h2,
