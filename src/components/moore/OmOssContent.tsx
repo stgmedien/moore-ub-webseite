@@ -44,20 +44,20 @@ export default function OmOssContent({ news = [] }: { news?: NewsItem[] }) {
           </div>
           <div className="facts-grid awards" style={{ marginTop: 20 }}>
             <div className="fact">
-              <div className="fact-key">GEN-E 2026 · RIGA</div>
-              <div className="fact-value">JA Europe Innovation of the Year</div>
-            </div>
-            <div className="fact">
-              <div className="fact-key">GEN-E 2026 · RIGA</div>
-              <div className="fact-value">FedEx Access Award</div>
-            </div>
-            <div className="fact">
               <div className="fact-key">
                 {no ? "NM 2026 · NORGE" : "NATIONAL FINAL 2026 · NORWAY"}
               </div>
               <div className="fact-value">
                 {no ? "Norges beste ungdomsbedrift" : "Norway's best student company"}
               </div>
+            </div>
+            <div className="fact">
+              <div className="fact-key">GEN-E 2026 · RIGA</div>
+              <div className="fact-value">FedEx Access Award</div>
+            </div>
+            <div className="fact">
+              <div className="fact-key">GEN-E 2026 · RIGA</div>
+              <div className="fact-value">JA Europe Innovation of the Year</div>
             </div>
           </div>
         </div>
